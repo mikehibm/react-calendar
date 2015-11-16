@@ -1,0 +1,31 @@
+{
+  "name": "react-calendar",
+  "version": "1.0.0",
+  "description": "A calendar example using React and Flux.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikehibm/react-calendar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikehibm/react-calendar/issues"
+  },
+  "homepage": "https://github.com/mikehibm/react-calendar#readme",
+  
+   "devDependencies": {
+    "babelify": "^6.3.0",
+    "browserify": "^11.2.0",
+    "director": "^1.2.8",
+    "flux": "^2.1.1",
+    "gulp": "^3.9.0",
+    "gulp-webserver": "^0.9.1",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}

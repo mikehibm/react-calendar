@@ -1,0 +1,14 @@
+
+header {
+    margin-bottom: 40px;
+    border-bottom: solid 1px pink;
+}
+
+footer {
+    margin-top: 40px;
+    border-top: solid 1px pink;
+}
+footer p {
+    text-align: center;
+    font-size: x-small;
+}
