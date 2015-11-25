@@ -18,9 +18,13 @@ const App = React.createClass({
   },
   
   render: function() {
+    var list = this.state.items.map(function(item){
+      return <li key={ item.id }>{ item.text }</li>
+    });
     return (
       <div>
-        カレンダーです。
+        カレンダーです。<br />
+        { list }
       </div>
     );
   },

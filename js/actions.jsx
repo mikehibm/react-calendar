@@ -26,19 +26,6 @@ const Actions = {
         });
     },
     
-    toggleItem: function (id) {
-        Dispatcher.dispatch({
-            actionType: Constants.TOGGLE_ITEM,
-            id: id
-        });
-    },
-    
-    toggleAll: function(){
-        Dispatcher.dispatch({
-            actionType: Constants.TOGGLE_ALL
-        });
-    },
-    
     showAll: function(){
         Dispatcher.dispatch({
             actionType: Constants.SHOW_ALL
@@ -55,14 +42,8 @@ const Actions = {
         Dispatcher.dispatch({
             actionType: Constants.SHOW_COMPLETED
         });
-    },
-
-    clearCompleted: function(){
-        Dispatcher.dispatch({
-            actionType: Constants.CLEAR_COMPLETED
-        });
     }
-    
+
 };
 
 module.exports = Actions;

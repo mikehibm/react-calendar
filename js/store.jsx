@@ -4,9 +4,15 @@ const EventEmitter = require('events').EventEmitter,
       Utils = require('./utils.jsx');
 
 const CHANGE_EVENT = 'change',
-      DBNAME = 'todo';
+      DBNAME = 'calendar';
 
-var items = [];
+var items = [
+        { id:"10001", text:"アイテム1",  date:"2015/12/01", time:"09:00" },
+        { id:"10002", text:"アイテム2",  date:"2015/12/03", time:"10:00" },
+        { id:"10003", text:"アイテム3",  date:"2015/12/03", time:"12:20" },
+        { id:"10004", text:"アイテム4",  date:"2015/12/10", time:"15:35" },
+        { id:"10005", text:"アイテム5",  date:"2015/12/11", time:"15:30" },
+    ];
 var itemFilter = Constants.ItemFilter.ALL;
 
 const Store = Object.assign(EventEmitter.prototype, {
@@ -16,8 +22,8 @@ const Store = Object.assign(EventEmitter.prototype, {
         });
     },
     
-    addItem: function(text, checked){
-        items.push({ id: Utils.uuid(), text: text, checked: checked });
+    addItem: function(text, date, time){
+        items.push({ id: Utils.uuid(), text: text, date: date, time: time });
         Store.emitChange();
     },
 
@@ -34,61 +40,16 @@ const Store = Object.assign(EventEmitter.prototype, {
         Store.emitChange();
     },
 
-    toggleItem: function(id){
-        var item = Store.getItem(id);
-        item && (item.checked = !item.checked);
-        Store.emitChange();
-    },
-    
-    toggleAll: function(){
-        var new_value = !Store.isAllChecked();
-        items = items.map(function(item){
-          return { id: item.id, text: item.text, checked: new_value };
-        });
-        Store.emitChange();
-    },
-    
-    removeCompletedItem: function(){
-        items = items.filter(function(item){
-            return !item.checked;
-        });
-        Store.emitChange();
-    },
-    
-    getCompletedItems: function(){
-        var list = items.filter(function(item){
-          return item.checked;
-        });
-        return list;
-    },
-    
-    getIncompleteItems: function(){
-        var list = items.filter(function(item){
-          return !item.checked;
-        });
-        return list;
-    },
-    
-    isAllChecked: function(){
-        return items.every(function(item){ return item.checked })
-    },
-
     getState: function () {
-        var filtered_items = items.filter(function(item){
-            return (itemFilter == Constants.ItemFilter.ALL) 
-                    || (itemFilter == Constants.ItemFilter.ACTIVE && !item.checked)
-                    || (itemFilter == Constants.ItemFilter.COMPLETED && item.checked);
-        });
-        
-        var countTodo = Store.getIncompleteItems().length;
-        var countCompleted = Store.getCompletedItems().length;
+        // var filtered_items = items.filter(function(item){
+        //     return (itemFilter == Constants.ItemFilter.ALL) 
+        //             || (itemFilter == Constants.ItemFilter.ACTIVE && !item.checked)
+        //             || (itemFilter == Constants.ItemFilter.COMPLETED && item.checked);
+        // });
         
         return { 
-            items: filtered_items,
-            isAllChecked: Store.isAllChecked() ,
-            countTodo: countTodo,
-            itemFilter: itemFilter,
-            hasCompleted: (countCompleted > 0)
+            items: items,//filtered_items,
+            itemFilter: itemFilter
         };
     },
 
@@ -130,14 +91,6 @@ Dispatcher.register(function (action) {
             Store.removeItem(action.id);
             break;
 
-        case Constants.TOGGLE_ITEM:
-            Store.toggleItem(action.id);
-            break;
-
-        case Constants.TOGGLE_ALL:
-            Store.toggleAll();
-            break;
-
         case Constants.SHOW_ALL:
             itemFilter = Constants.ItemFilter.ALL;
             Store.emitChange();
@@ -153,19 +106,11 @@ Dispatcher.register(function (action) {
             Store.emitChange();
             break;
 
-        case Constants.CLEAR_COMPLETED:
-            Store.removeCompletedItem();
-            break;
-
-        case Constants.EDIT_ITEM:
-            Store.editItem(action.id, action.text);
-            break;
-
         default:
             // no op
     };
 });
 
-Store.load();
+//Store.load();
 
 module.exports = Store;
