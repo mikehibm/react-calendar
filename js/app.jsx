@@ -18,14 +18,27 @@ const App = React.createClass({
   },
   
   render: function() {
-    var list = this.state.items.map(function(item){
+    let days = [];
+    let dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    for (let i = 0; i < 31; i++){
+      days.push(<div key={i} className={'day ' + dayNames[ i % 7 ]}>{ i+1 }</div>);
+    }
+    
+    let items = this.state.items.map(function(item){
       return <li key={ item.id }>{ item.text }</li>
     });
     return (
-      <div>
-        カレンダーです。<br />
-        { list }
-      </div>
+      <section>
+        <header>
+          { this.state.year}年 { this.state.month }月
+        </header>
+        <div className='days'>
+          { days }
+        </div>
+        <div className='items'>
+          { items }
+        </div>
+      </section>
     );
   },
   

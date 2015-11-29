@@ -6,14 +6,17 @@ const EventEmitter = require('events').EventEmitter,
 const CHANGE_EVENT = 'change',
       DBNAME = 'calendar';
 
-var items = [
+let date = new Date();
+let year = date.getFullYear();
+let month = date.getMonth() + 1;
+let items = [
         { id:"10001", text:"アイテム1",  date:"2015/12/01", time:"09:00" },
         { id:"10002", text:"アイテム2",  date:"2015/12/03", time:"10:00" },
         { id:"10003", text:"アイテム3",  date:"2015/12/03", time:"12:20" },
         { id:"10004", text:"アイテム4",  date:"2015/12/10", time:"15:35" },
         { id:"10005", text:"アイテム5",  date:"2015/12/11", time:"15:30" },
     ];
-var itemFilter = Constants.ItemFilter.ALL;
+let itemFilter = Constants.ItemFilter.ALL;
 
 const Store = Object.assign(EventEmitter.prototype, {
     getItem: function (id) {
@@ -48,6 +51,8 @@ const Store = Object.assign(EventEmitter.prototype, {
         // });
         
         return { 
+            year: year,
+            month: month,
             items: items,//filtered_items,
             itemFilter: itemFilter
         };

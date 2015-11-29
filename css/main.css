@@ -12,3 +12,27 @@ footer p {
     text-align: center;
     font-size: x-small;
 }
+
+.days {
+}
+
+.day {
+    float: left;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    border: 1px solid pink;
+}
+
+.day.Sun {
+    background-color: #DC6FBA;
+    clear:both;
+}
+
+.day.Sat {
+    background-color: #FF6FBA;
+}
+
+.items {
+    clear: both;
+}
