@@ -18,8 +18,13 @@ const App = React.createClass({
   },
   
   render: function() {
-    let days = [];
-    let dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const days = [], dayHeader = [];
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    
+    dayNames.forEach(function(item, index){
+      dayHeader.push(<div key={ index }>{ item }</div>);
+    });
+    
     for (let i = 0; i < 31; i++){
       days.push(<div key={i} className={'day ' + dayNames[ i % 7 ]}>{ i+1 }</div>);
     }
@@ -32,6 +37,9 @@ const App = React.createClass({
         <header>
           { this.state.year}年 { this.state.month }月
         </header>
+        <div className='dayHeader'>
+          { dayHeader }
+        </div>
         <div className='days'>
           { days }
         </div>

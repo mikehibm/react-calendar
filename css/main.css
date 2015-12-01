@@ -13,6 +13,18 @@ footer p {
     font-size: x-small;
 }
 
+.dayHeader {
+    display: inline-block;
+}
+
+.dayHeader div {
+    display: inline-block;
+    width: 80px;
+    border: 1px solid pink;
+    background-color: pink;
+    text-align: center;
+}
+
 .days {
 }
 
