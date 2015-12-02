@@ -45,6 +45,15 @@ footer p {
     background-color: #FF6FBA;
 }
 
+.day.today {
+    background-color: yellow;
+}
+
+.past.day {
+    background-color: #aaa;
+}
+
+
 .items {
     clear: both;
 }

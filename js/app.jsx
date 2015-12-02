@@ -4,6 +4,8 @@ const React = require('react'),
       Store = require('./store.jsx'),
       Actions = require('./actions.jsx');
 
+/* global moment */
+
 const App = React.createClass({
   getInitialState: function() {
     return Store.getState();
@@ -18,6 +20,14 @@ const App = React.createClass({
   },
   
   render: function() {
+    const currentDate = this.state.currentDate;
+    const year = moment(currentDate).year();
+    const month = moment(currentDate).month() + 1;
+    const dayOfMonth = moment(currentDate).date();
+    const startOfMonth = moment(currentDate).startOf('month');
+    const startDay = startOfMonth.weekday();
+    console.log('startDay=' + startDay);
+    
     const days = [], dayHeader = [];
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     
@@ -25,8 +35,13 @@ const App = React.createClass({
       dayHeader.push(<div key={ index }>{ item }</div>);
     });
     
-    for (let i = 0; i < 31; i++){
-      days.push(<div key={i} className={'day ' + dayNames[ i % 7 ]}>{ i+1 }</div>);
+    for (let i = 0; i < startDay; i++){
+      days.push(<div key={i} className={'past day ' + dayNames[ i % 7 ]}>&nbsp;</div>);
+    }
+    
+    for (let i = 0 + startDay; i < 31 + startDay; i++){
+      let dayClass = dayOfMonth === (i - startDay + 1) ? " today" : "";
+      days.push(<div key={i} className={'day ' + dayNames[ i % 7 ] + dayClass}>{ i - startDay +1 }</div>);
     }
     
     let items = this.state.items.map(function(item){
@@ -35,7 +50,7 @@ const App = React.createClass({
     return (
       <section>
         <header>
-          { this.state.year}年 { this.state.month }月
+          { year}年 { month }月
         </header>
         <div className='dayHeader'>
           { dayHeader }

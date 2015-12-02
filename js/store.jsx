@@ -5,10 +5,10 @@ const EventEmitter = require('events').EventEmitter,
 
 const CHANGE_EVENT = 'change',
       DBNAME = 'calendar';
+      
+/* global moment */
 
-let date = new Date();
-let year = date.getFullYear();
-let month = date.getMonth() + 1;
+let currentDate = moment().toDate();
 let items = [
         { id:"10001", text:"アイテム1",  date:"2015/12/01", time:"09:00" },
         { id:"10002", text:"アイテム2",  date:"2015/12/03", time:"10:00" },
@@ -50,11 +50,13 @@ const Store = Object.assign(EventEmitter.prototype, {
         //             || (itemFilter == Constants.ItemFilter.COMPLETED && item.checked);
         // });
         
+        let year = currentDate.getFullYear();
+        let month = currentDate.getMonth() + 1;
+        
         return { 
-            year: year,
-            month: month,
+            currentDate,
             items: items,//filtered_items,
-            itemFilter: itemFilter
+            itemFilter
         };
     },
 
