@@ -8,7 +8,7 @@ const CHANGE_EVENT = 'change',
       
 /* global moment */
 
-let currentDate = moment().toDate();
+let currentDate = moment().startOf('day').toDate();
 let items = [
         { id:"10001", text:"アイテム1",  date:"2015/12/01", time:"09:00" },
         { id:"10002", text:"アイテム2",  date:"2015/12/03", time:"10:00" },
@@ -19,6 +19,12 @@ let items = [
 let itemFilter = Constants.ItemFilter.ALL;
 
 const Store = Object.assign(EventEmitter.prototype, {
+    
+    moveMonth: function(offset){
+        currentDate = moment(currentDate).add(offset, 'months').toDate();
+        Store.emitChange();
+    },
+    
     getItem: function (id) {
         return items.find(function(item){
             return item.id === id;
@@ -86,6 +92,14 @@ const Store = Object.assign(EventEmitter.prototype, {
 
 Dispatcher.register(function (action) {
     switch (action.actionType) {
+        case Constants.PREV_MONTH:
+            Store.moveMonth(-1);
+            break;
+
+        case Constants.NEXT_MONTH:
+            Store.moveMonth(1);
+            break;
+
         case Constants.ADD_ITEM:
             Store.addItem(action.text, action.checked);
             break;

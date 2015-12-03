@@ -3,6 +3,19 @@ const Dispatcher = require('./dispatcher.jsx'),
       Constants = require('./constants.jsx');
 
 const Actions = {
+    
+    prevMonth: function(){
+        Dispatcher.dispatch({
+            actionType: Constants.PREV_MONTH
+        });
+    },
+    
+    nextMonth: function(){
+        Dispatcher.dispatch({
+            actionType: Constants.NEXT_MONTH
+        });
+    },
+    
     addItem: function (text) {
         Dispatcher.dispatch({
             actionType: Constants.ADD_ITEM,

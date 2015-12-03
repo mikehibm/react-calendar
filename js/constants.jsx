@@ -1,4 +1,7 @@
 module.exports = {
+	PREV_MONTH: "prev_month",
+	NEXT_MONTH: "next_month",
+	
     ADD_ITEM: "add_item",
     EDIT_ITEM: "edit_item",
     REMOVE_ITEM: "remove_item",

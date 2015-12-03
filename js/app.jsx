@@ -19,6 +19,15 @@ const App = React.createClass({
     Store.removeChangeListener(this._onChange);
   },
   
+  prevMonth: function(){
+    console.log('Prev Month');
+    Actions.prevMonth();
+  },
+  nextMonth: function(){
+    console.log('Next Month');
+    Actions.nextMonth();
+  },
+  
   render: function() {
     const currentDate = this.state.currentDate;
     const year = moment(currentDate).year();
@@ -40,7 +49,8 @@ const App = React.createClass({
     }
     
     for (let i = 0 + startDay; i < 31 + startDay; i++){
-      let dayClass = dayOfMonth === (i - startDay + 1) ? " today" : "";
+      let isToday = moment().isSame(moment({year: year, month: month-1, day: (i - startDay+1)}), 'day');
+      let dayClass = isToday ? " today" : "";
       days.push(<div key={i} className={'day ' + dayNames[ i % 7 ] + dayClass}>{ i - startDay +1 }</div>);
     }
     
@@ -50,14 +60,19 @@ const App = React.createClass({
     return (
       <section>
         <header>
+          <button onClick={ this.prevMonth }>&lt;</button>
           { year}年 { month }月
+          <button onClick={ this.nextMonth }>&gt;</button>
         </header>
+        
         <div className='dayHeader'>
           { dayHeader }
         </div>
+        
         <div className='days'>
           { days }
         </div>
+        
         <div className='items'>
           { items }
         </div>
