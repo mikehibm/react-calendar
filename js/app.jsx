@@ -6,6 +6,9 @@ const React = require('react'),
 
 /* global moment */
 
+const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+
 class CalendarHeader extends React.Component {
   prevMonth() {
     Actions.prevMonth();
@@ -22,6 +25,20 @@ class CalendarHeader extends React.Component {
           { year }年 { month }月
           <button onClick={ this.nextMonth.bind(this) }>&gt;</button>
         </header>;
+  }
+}
+
+class DayHeader extends React.Component {
+  render(){
+    const dayHeader = [];    
+
+    dayNames.forEach(function(item, index) {
+      dayHeader.push(<div key={ index }>{ item }</div>);
+    });
+    
+    return <div className='dayHeader'>
+      { dayHeader }
+    </div>;
   }
 }
 
@@ -47,13 +64,7 @@ class App extends React.Component{
     const startOfMonth = moment(currentDate).startOf('month');
     const startDay = startOfMonth.weekday();
 
-    const days = [],
-      dayHeader = [];
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    dayNames.forEach(function(item, index) {
-      dayHeader.push(<div key={ index }>{ item }</div>);
-    });
+    const days = [];
 
     for (let i = 0; i < startDay; i++) {
       days.push(<div key={i} className={'past day ' + dayNames[ i % 7 ]}>&nbsp;</div>);
@@ -76,10 +87,8 @@ class App extends React.Component{
       <section>
         <CalendarHeader year={ year } month={ month }></CalendarHeader>
         
-        <div className='dayHeader'>
-          { dayHeader }
-        </div>
-        
+        <DayHeader></DayHeader>
+
         <div className='days'>
           { days }
         </div>
