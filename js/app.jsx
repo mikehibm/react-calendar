@@ -20,34 +20,74 @@ class CalendarHeader extends React.Component {
   render() {
     const { year, month } = this.props;
 
-    return <header>
+    return (
+      <header>
           <button onClick={ this.prevMonth.bind(this) }>&lt;</button>
-          { year }年 { month }月
+          { year }年 { month+1 }月
           <button onClick={ this.nextMonth.bind(this) }>&gt;</button>
-        </header>;
+      </header>);
   }
 }
 
 class DayHeader extends React.Component {
-  render(){
-    const dayHeader = [];    
+  render() {
+    const dayHeader = [];
 
     dayNames.forEach(function(item, index) {
       dayHeader.push(<div key={ index }>{ item }</div>);
     });
-    
-    return <div className='dayHeader'>
-      { dayHeader }
-    </div>;
+
+    return (
+      <div className='dayHeader'>
+        { dayHeader }
+      </div>);
   }
 }
 
-class App extends React.Component{
+class DayItem extends React.Component {
+  render() {
+    const { currentDate, year, month, dayNum, isPast } = this.props;
+    const startDay = moment(currentDate).startOf('month').weekday();
+
+    if (isPast){
+      return (<div className={'past day ' + dayNames[ dayNum % 7 ]}>&nbsp;</div>);
+    } else {
+      let isToday = moment().isSame(moment({ year: year, month: month, day: (dayNum - startDay + 1) }), 'day');
+      let dayClass = isToday ? " today" : "";
+      return (<div className={'day ' + dayNames[ dayNum % 7 ] + dayClass}>{ dayNum - startDay +1 }</div>);
+    }
+  }
+}
+
+class DayItems extends React.Component {
+  render() {
+    const { currentDate, year, month } = this.props;
+    const startDay = moment(currentDate).startOf('month').weekday();
+    const days = [];
+
+    for (let i = 0; i < startDay; i++) {
+      days.push(<DayItem key={i}currentDate={currentDate} year={ year } month={ month }
+                  isPast={ true } dayNum={i}></DayItem>);
+    }
+
+    for (let i = 0 + startDay; i < 31 + startDay; i++) {
+      days.push(<DayItem key={i} currentDate={currentDate} year={ year } month={ month }
+                  isPast={ false } dayNum={i}></DayItem>);
+    }
+
+    return (
+      <div className='days'>
+          { days }
+      </div>);
+  }
+}
+
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = Store.getState();
   }
-  
+
   componentDidMount() {
     Store.addChangeListener(this._onChange.bind(this));
   }
@@ -59,39 +99,17 @@ class App extends React.Component{
   render() {
     const currentDate = this.state.currentDate;
     const year = moment(currentDate).year();
-    const month = moment(currentDate).month() + 1;
-    const dayOfMonth = moment(currentDate).date();
-    const startOfMonth = moment(currentDate).startOf('month');
-    const startDay = startOfMonth.weekday();
-
-    const days = [];
-
-    for (let i = 0; i < startDay; i++) {
-      days.push(<div key={i} className={'past day ' + dayNames[ i % 7 ]}>&nbsp;</div>);
-    }
-
-    for (let i = 0 + startDay; i < 31 + startDay; i++) {
-      let isToday = moment().isSame(moment({
-        year: year,
-        month: month - 1,
-        day: (i - startDay + 1)
-      }), 'day');
-      let dayClass = isToday ? " today" : "";
-      days.push(<div key={i} className={'day ' + dayNames[ i % 7 ] + dayClass}>{ i - startDay +1 }</div>);
-    }
+    const month = moment(currentDate).month();
 
     let items = this.state.items.map(function(item) {
       return <li key={ item.id }>{ item.text }</li>
     });
+
     return (
       <section>
         <CalendarHeader year={ year } month={ month }></CalendarHeader>
-        
         <DayHeader></DayHeader>
-
-        <div className='days'>
-          { days }
-        </div>
+        <DayItems currentDate={ currentDate } year={ year } month={ month }></DayItems>
         
         <div className='items'>
           { items }
