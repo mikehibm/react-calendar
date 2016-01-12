@@ -8,7 +8,7 @@ const React = require('react'),
 
 const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-
+/* ================================================== */
 class CalendarHeader extends React.Component {
   prevMonth() {
     Actions.prevMonth();
@@ -29,59 +29,69 @@ class CalendarHeader extends React.Component {
   }
 }
 
+/* ================================================== */
 class DayHeader extends React.Component {
   render() {
-    const dayHeader = [];
-
-    dayNames.forEach(function(item, index) {
-      dayHeader.push(<div key={ index }>{ item }</div>);
+    const dayHeaders = dayNames.map(function(item, index){
+      return <div key={ index }>{ item }</div>;
     });
 
     return (
       <div className='dayHeader'>
-        { dayHeader }
+        { dayHeaders }
       </div>);
   }
 }
 
+/* ================================================== */
 class DayItem extends React.Component {
   render() {
-    const { currentDate, year, month, dayNum, isPast } = this.props;
+    const { currentDate, year, month, dayNum, isPast, items } = this.props;
     const startDay = moment(currentDate).startOf('month').weekday();
+    const date = moment({ year: year, month: month, day: (dayNum - startDay + 1) });
+
+    const filteredItems = items.filter(function(item){
+      return moment(item.date, 'YYYY/MM/DD').isSame(date);
+    }).map(function(item) {
+      return <li key={ item.id }>{ item.text }</li>
+    });
 
     if (isPast){
       return (<div className={'past day ' + dayNames[ dayNum % 7 ]}>&nbsp;</div>);
     } else {
-      let isToday = moment().isSame(moment({ year: year, month: month, day: (dayNum - startDay + 1) }), 'day');
-      let dayClass = isToday ? " today" : "";
-      return (<div className={'day ' + dayNames[ dayNum % 7 ] + dayClass}>{ dayNum - startDay +1 }</div>);
+      const isToday = moment().isSame(date, 'day');
+      const dayClass = isToday ? " today" : "";
+      return (
+        <div className={'day ' + dayNames[ dayNum % 7 ] + dayClass}>
+          { dayNum - startDay +1 }
+          <div className='items'>{ filteredItems }</div>
+        </div>);
     }
   }
 }
 
+/* ================================================== */
 class DayItems extends React.Component {
   render() {
-    const { currentDate, year, month } = this.props;
+    const { currentDate, year, month, items } = this.props;
     const startDay = moment(currentDate).startOf('month').weekday();
     const days = [];
 
     for (let i = 0; i < startDay; i++) {
       days.push(<DayItem key={i}currentDate={currentDate} year={ year } month={ month }
-                  isPast={ true } dayNum={i}></DayItem>);
+                  isPast={ true } dayNum={i} items={ items }></DayItem>);
     }
 
     for (let i = 0 + startDay; i < 31 + startDay; i++) {
       days.push(<DayItem key={i} currentDate={currentDate} year={ year } month={ month }
-                  isPast={ false } dayNum={i}></DayItem>);
+                  isPast={ false } dayNum={i} items={ items }></DayItem>);
     }
 
-    return (
-      <div className='days'>
-          { days }
-      </div>);
+    return (<div className='days'>{ days }</div>);
   }
 }
 
+/* ================================================== */
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -97,23 +107,15 @@ class App extends React.Component {
   }
 
   render() {
-    const currentDate = this.state.currentDate;
+    const {currentDate, items} = this.state;
     const year = moment(currentDate).year();
     const month = moment(currentDate).month();
-
-    let items = this.state.items.map(function(item) {
-      return <li key={ item.id }>{ item.text }</li>
-    });
 
     return (
       <section>
         <CalendarHeader year={ year } month={ month }></CalendarHeader>
         <DayHeader></DayHeader>
-        <DayItems currentDate={ currentDate } year={ year } month={ month }></DayItems>
-        
-        <div className='items'>
-          { items }
-        </div>
+        <DayItems currentDate={ currentDate } year={ year } month={ month } items={ items }></DayItems>
       </section>
     );
   }
@@ -124,6 +126,7 @@ class App extends React.Component {
 }
 
 
+/* ================================================== */
 //Define routes.
 var router = Router({
     '/': function() {

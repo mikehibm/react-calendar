@@ -7,6 +7,7 @@ header {
 footer {
     margin-top: 40px;
     border-top: solid 1px pink;
+    clear: both;
 }
 footer p {
     text-align: center;
@@ -37,12 +38,12 @@ footer p {
 }
 
 .day.Sun {
-    background-color: #DC6FBA;
+    background-color: #E074D0;
     clear:both;
 }
 
 .day.Sat {
-    background-color: #FF6FBA;
+    background-color: #88AAFF;
 }
 
 .day.today {
@@ -55,5 +56,7 @@ footer p {
 
 
 .items {
-    clear: both;
+    text-align:left;
+    font-size:x-small;
+    /*clear: both;*/
 }
