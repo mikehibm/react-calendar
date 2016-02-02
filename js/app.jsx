@@ -53,7 +53,7 @@ class DayItem extends React.Component {
     const filteredItems = items.filter(function(item){
       return moment(item.date, 'YYYY/MM/DD').isSame(date);
     }).map(function(item) {
-      return <li key={ item.id }>{ item.text }</li>
+      return <li key={ item.id }>{item.time} { item.text }</li>
     });
 
     if (isPast){

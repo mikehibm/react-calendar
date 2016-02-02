@@ -10,16 +10,16 @@ const CHANGE_EVENT = 'change',
 
 let currentDate = moment().startOf('day').toDate();
 let items = [
-        { id:"10001", text:"アイテム1",  date:"2016/01/01", time:"09:00" },
-        { id:"10002", text:"アイテム2",  date:"2016/01/03", time:"10:00" },
-        { id:"10003", text:"アイテム3",  date:"2016/01/03", time:"12:20" },
-        { id:"10004", text:"アイテム4",  date:"2016/01/10", time:"15:35" },
-        { id:"10005", text:"アイテム5",  date:"2016/01/11", time:"15:30" },
-        { id:"10006", text:"VS Meeting",  date:"2016/01/12", time:"13:30" },
-        { id:"10007", text:"ProjectM ミーティング",  date:"2016/01/12", time:"15:00" },
-        { id:"10008", text:"アイテム8",  date:"2016/02/10", time:"15:30" },
-        { id:"10009", text:"アイテム9",  date:"2016/02/16", time:"15:30" },
-        { id:"10010", text:"アイテム10",  date:"2016/02/28", time:"15:30" },
+        { id:"10001", text:"アイテム1",  date:"2016/02/01", time:"09:00" },
+        { id:"10002", text:"アイテム2",  date:"2016/02/03", time:"10:00" },
+        { id:"10003", text:"アイテム3",  date:"2016/02/03", time:"12:20" },
+        { id:"10004", text:"アイテム4",  date:"2016/02/10", time:"15:35" },
+        { id:"10005", text:"アイテム5",  date:"2016/02/12", time:"15:30" },
+        { id:"10006", text:"VS Meeting",  date:"2016/02/12", time:"13:30" },
+        { id:"10007", text:"ProjectM ミーティング",  date:"2016/02/12", time:"15:00" },
+        { id:"10008", text:"アイテム8",  date:"2016/03/10", time:"15:30" },
+        { id:"10009", text:"アイテム9",  date:"2016/03/16", time:"15:30" },
+        { id:"10010", text:"アイテム10",  date:"2016/04/28", time:"15:30" },
     ];
 let itemFilter = Constants.ItemFilter.ALL;
 
