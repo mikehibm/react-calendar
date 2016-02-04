@@ -4,6 +4,15 @@ header {
     border-bottom: solid 1px pink;
 }
 
+header button {
+    display: inline-block;
+    min-width: 40px;
+    min-height: 40px;
+    margin: 4px;
+    padding: 16px;
+    border-radius: 4px;
+}
+
 footer {
     margin-top: 40px;
     border-top: solid 1px pink;
