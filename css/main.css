@@ -1,16 +1,17 @@
-
-header {
-    margin-bottom: 40px;
-    border-bottom: solid 1px pink;
+body {
+    font-family: 'Roboto', sans-serif;
 }
 
-header button {
+
+header {
+    margin-bottom: 20px;
+    /*border-bottom: solid 1px pink;*/
+}
+
+header .year_month{
     display: inline-block;
-    min-width: 40px;
-    min-height: 40px;
-    margin: 4px;
-    padding: 16px;
-    border-radius: 4px;
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
 footer {

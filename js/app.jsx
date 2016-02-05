@@ -1,10 +1,22 @@
+/* global moment */
+
+//import React from 'react';
 const React = require('react'),
   ReactDOM = require('react-dom'),
   Router = require('director').Router,
   Store = require('./store.jsx'),
   Actions = require('./actions.jsx');
 
-/* global moment */
+import RaisedButton from 'material-ui/lib/raised-button';
+
+ /* ================================================== */
+// For Material UI
+import injectTapEventPlugin from 'react-tap-event-plugin';
+ 
+//Needed for onTouchTap. Can go away when react 1.0 release 
+injectTapEventPlugin();
+
+
 
 const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -22,9 +34,11 @@ class CalendarHeader extends React.Component {
 
     return (
       <header>
-          <button onClick={ this.prevMonth.bind(this) }>&lt;</button>
-          { year }年 { month+1 }月
-          <button onClick={ this.nextMonth.bind(this) }>&gt;</button>
+          <RaisedButton label="&lt;" onClick={ this.prevMonth.bind(this) } />
+          <div className="year_month">
+            { year }年 { month+1 }月
+          </div>
+          <RaisedButton label="&gt;" onClick={ this.nextMonth.bind(this) } />
       </header>);
   }
 }
@@ -57,16 +71,23 @@ class DayItem extends React.Component {
     });
 
     if (isPast){
-      return (<div className={'past day ' + dayNames[ dayNum % 7 ]}>&nbsp;</div>);
-    } else {
-      const isToday = moment().isSame(date, 'day');
-      const dayClass = isToday ? " today" : "";
       return (
-        <div className={'day ' + dayNames[ dayNum % 7 ] + dayClass}>
-          { dayNum - startDay +1 }
+        <div className={'past day ' + dayNames[ dayNum % 7 ]}>&nbsp;<br />
           <div className='items'>{ filteredItems }</div>
         </div>);
-    }
+    } 
+    
+    const isToday = moment().isSame(date, 'day');
+    const dayClass = isToday ? " today" : "";
+    return (
+      <div className={'day ' + dayNames[ dayNum % 7 ] + dayClass} onClick={ this.handleClick.bind(this)  }>
+        { dayNum - startDay +1 }
+        <div className='items'>{ filteredItems }</div>
+      </div>);
+  }
+  
+  handleClick(){
+    alert("Clicked");
   }
 }
 
@@ -126,9 +147,10 @@ class App extends React.Component {
 }
 
 
+
 /* ================================================== */
 //Define routes.
-var router = Router({
+const router = Router({
     '/': function() {
       Actions.showAll();
     },
