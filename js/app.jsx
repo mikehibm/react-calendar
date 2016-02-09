@@ -58,31 +58,45 @@ class DayHeader extends React.Component {
 }
 
 /* ================================================== */
+class CalendarItem extends React.Component {
+  render() {
+      const item = this.props.item;
+      return <li key={ item.id }>{item.time} { item.text }</li>;
+  }
+}
+
+/* ================================================== */
 class DayItem extends React.Component {
   render() {
     const { currentDate, year, month, dayNum, isPast, items } = this.props;
     const startDay = moment(currentDate).startOf('month').weekday();
     const date = moment({ year: year, month: month, day: (dayNum - startDay + 1) });
+    const isToday = moment().isSame(date, 'day');
+    const dayName = dayNames[ dayNum % 7 ];
+    const dayClass = 'day items ' + dayName + ' ' + (isToday ? 'today' : '');
 
     const filteredItems = items.filter(function(item){
       return moment(item.date, 'YYYY/MM/DD').isSame(date);
     }).map(function(item) {
-      return <li key={ item.id }>{item.time} { item.text }</li>
+      return <CalendarItem key={item.id} item={ item } />;
+      //return <li key={ item.id }>{item.time} { item.text }</li>;
     });
 
     if (isPast){
       return (
-        <div className={'past day ' + dayNames[ dayNum % 7 ]}>&nbsp;<br />
-          <div className='items'>{ filteredItems }</div>
+        <div className={ 'past ' + dayClass }>&nbsp;<br />
+          <ul>
+            { filteredItems }
+          </ul>
         </div>);
     } 
     
-    const isToday = moment().isSame(date, 'day');
-    const dayClass = isToday ? " today" : "";
     return (
-      <div className={'day ' + dayNames[ dayNum % 7 ] + dayClass} onClick={ this.handleClick.bind(this)  }>
+      <div className={dayClass} onClick={ this.handleClick.bind(this)  }>
         { dayNum - startDay +1 }
-        <div className='items'>{ filteredItems }</div>
+        <ul>
+        { filteredItems }
+        </ul>
       </div>);
   }
   

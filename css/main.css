@@ -61,14 +61,15 @@ footer p {
 }
 
 .past.day {
-    background-color: #aaa;
+    background-color: #eee;
 }
 
 
-.items {
-    margin-left: 2px;
+.items ul {
+    padding-left: 2px;
     text-align:left;
     font-size:60%;
     /*clear: both;*/
     list-style-type: none;
 }
+
