@@ -7,7 +7,10 @@ const React = require('react'),
   Store = require('./store.jsx'),
   Actions = require('./actions.jsx');
 
+import Dialog from 'material-ui/lib/dialog';
+import FlatButton from 'material-ui/lib/flat-button';
 import RaisedButton from 'material-ui/lib/raised-button';
+import DatePicker from 'material-ui/lib/date-picker/date-picker';
 
  /* ================================================== */
 // For Material UI
@@ -67,6 +70,21 @@ class CalendarItem extends React.Component {
 
 /* ================================================== */
 class DayItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+    };
+  }  
+  
+  handleClick(){
+    this.setState({open: true});
+  }
+  
+  handleClose(){
+    this.setState({open: false});
+  }
+
   render() {
     const { currentDate, year, month, dayNum, isPast, items } = this.props;
     const startDay = moment(currentDate).startOf('month').weekday();
@@ -81,6 +99,15 @@ class DayItem extends React.Component {
       return <CalendarItem key={item.id} item={ item } />;
       //return <li key={ item.id }>{item.time} { item.text }</li>;
     });
+    
+    const actions = [
+      <FlatButton
+        label="Ok"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleClose.bind(this)}
+      />,
+    ];    
 
     if (isPast){
       return (
@@ -97,12 +124,20 @@ class DayItem extends React.Component {
         <ul>
         { filteredItems }
         </ul>
+        
+        <Dialog
+          title="Dialog With Date Picker"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose.bind(this)}
+        >
+          Open a Date Picker dialog from within a dialog.
+          <DatePicker hintText="Date Picker" />
+        </Dialog>        
       </div>);
   }
   
-  handleClick(){
-    alert("Clicked");
-  }
 }
 
 /* ================================================== */
