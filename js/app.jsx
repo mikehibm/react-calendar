@@ -11,6 +11,9 @@ import Dialog from 'material-ui/lib/dialog';
 import FlatButton from 'material-ui/lib/flat-button';
 import RaisedButton from 'material-ui/lib/raised-button';
 import DatePicker from 'material-ui/lib/date-picker/date-picker';
+import TimePicker from 'material-ui/lib/time-picker/time-picker';
+import TextField from 'material-ui/lib/text-field';
+
 
  /* ================================================== */
 // For Material UI
@@ -81,6 +84,11 @@ class DayItem extends React.Component {
     this.setState({open: true});
   }
   
+  handleCloseOK(){
+    alert("OK!");
+    this.handleClose();
+  }
+  
   handleClose(){
     this.setState({open: false});
   }
@@ -97,43 +105,34 @@ class DayItem extends React.Component {
       return moment(item.date, 'YYYY/MM/DD').isSame(date);
     }).map(function(item) {
       return <CalendarItem key={item.id} item={ item } />;
-      //return <li key={ item.id }>{item.time} { item.text }</li>;
     });
     
     const actions = [
-      <FlatButton
-        label="Ok"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={this.handleClose.bind(this)}
-      />,
+      <FlatButton label="Ok" primary={true} keyboardFocused={true} onTouchTap={this.handleCloseOK.bind(this)} />,
     ];    
 
     if (isPast){
       return (
         <div className={ 'past ' + dayClass }>&nbsp;<br />
-          <ul>
-            { filteredItems }
-          </ul>
+          <ul>{ filteredItems }</ul>
         </div>);
     } 
     
     return (
       <div className={dayClass} onClick={ this.handleClick.bind(this)  }>
         { dayNum - startDay +1 }
-        <ul>
-        { filteredItems }
-        </ul>
+        <ul>{ filteredItems }</ul>
         
         <Dialog
-          title="Dialog With Date Picker"
-          actions={actions}
-          modal={false}
-          open={this.state.open}
+          title="新しい予定"
+          actions={actions} modal={false} open={this.state.open}
           onRequestClose={this.handleClose.bind(this)}
         >
-          Open a Date Picker dialog from within a dialog.
-          <DatePicker hintText="Date Picker" />
+          <div className="row">
+            <DatePicker hintText="Date" autoOk={true} defaultDate={ date.toDate() } />
+            <TimePicker />
+          </div>
+          <TextField hintText="新しい予定"  defaultValue="新しい予定です。" />
         </Dialog>        
       </div>);
   }
