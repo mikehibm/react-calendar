@@ -75,24 +75,13 @@ class CalendarItem extends React.Component {
 class DayItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      open: false,
-    };
   }  
   
-  handleClick(){
-    this.setState({open: true});
+  handleClick(date){
+    console.log('DayItem clicked');
+    Actions.showItem(date, 'dummy');
   }
   
-  handleCloseOK(){
-    alert("OK!");
-    this.handleClose();
-  }
-  
-  handleClose(){
-    this.setState({open: false});
-  }
-
   render() {
     const { currentDate, year, month, dayNum, isPast, items } = this.props;
     const startDay = moment(currentDate).startOf('month').weekday();
@@ -107,10 +96,6 @@ class DayItem extends React.Component {
       return <CalendarItem key={item.id} item={ item } />;
     });
     
-    const actions = [
-      <FlatButton label="Ok" primary={true} keyboardFocused={true} onTouchTap={this.handleCloseOK.bind(this)} />,
-    ];    
-
     if (isPast){
       return (
         <div className={ 'past ' + dayClass }>&nbsp;<br />
@@ -119,24 +104,60 @@ class DayItem extends React.Component {
     } 
     
     return (
-      <div className={dayClass} onClick={ this.handleClick.bind(this)  }>
-        { dayNum - startDay +1 }
+      <div className={dayClass} onClick={ this.handleClick.bind(this, date.toDate())  }>
+        { date.format('D') }
         <ul>{ filteredItems }</ul>
-        
-        <Dialog
-          title="新しい予定"
-          actions={actions} modal={false} open={this.state.open}
-          onRequestClose={this.handleClose.bind(this)}
-        >
-          <div className="row">
-            <DatePicker hintText="Date" autoOk={true} defaultDate={ date.toDate() } />
-            <TimePicker />
-          </div>
-          <TextField hintText="新しい予定"  defaultValue="新しい予定です。" />
-        </Dialog>        
       </div>);
   }
   
+}
+
+/* ================================================== */
+class CalendarItemDialog extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      open: this.props.isDialogOpen,
+      selectedDate: this.props.selectedDate
+    };
+  }
+  
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      open: nextProps.isDialogOpen,
+      selectedDate: nextProps.selectedDate
+    });
+  }
+  
+  handleCloseOK(){
+    alert("OK!");
+    this.handleClose();
+  }
+  
+  handleClose(){
+    this.setState({open: false});
+  }
+
+  render(){
+    const selectedDate = this.state.selectedDate;
+    const open = this.state.open;
+    const actions = [
+      <FlatButton label="Ok" primary={true} keyboardFocused={true} onTouchTap={this.handleCloseOK.bind(this)} />,
+    ];    
+
+    return (
+      <Dialog
+          title="新しい予定"
+          actions={actions} modal={false} open={open}
+          onRequestClose={this.handleClose.bind(this)}
+        >
+          <div className="row">
+            <DatePicker hintText="Date" autoOk={true} defaultDate={ selectedDate } />
+            <TimePicker hintText="Time" autoOk={false} />
+          </div>
+          <TextField hintText="新しい予定"  defaultValue="新しい予定です。" />
+      </Dialog>);
+  }
 }
 
 /* ================================================== */
@@ -176,7 +197,7 @@ class App extends React.Component {
   }
 
   render() {
-    const {currentDate, items} = this.state;
+    const {currentDate, items, selectedDate, isDialogOpen} = this.state;
     const year = moment(currentDate).year();
     const month = moment(currentDate).month();
 
@@ -185,6 +206,7 @@ class App extends React.Component {
         <CalendarHeader year={ year } month={ month }></CalendarHeader>
         <DayHeader></DayHeader>
         <DayItems currentDate={ currentDate } year={ year } month={ month } items={ items }></DayItems>
+        <CalendarItemDialog selectedDate={ selectedDate } isDialogOpen={ isDialogOpen } />
       </section>
     );
   }

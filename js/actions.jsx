@@ -16,6 +16,14 @@ const Actions = {
         });
     },
     
+    showItem: function (date, text) {
+        Dispatcher.dispatch({
+            actionType: Constants.SHOW_ITEM,
+            date: date,
+            text: text
+        });
+    },
+    
     addItem: function (text) {
         Dispatcher.dispatch({
             actionType: Constants.ADD_ITEM,

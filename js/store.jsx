@@ -9,6 +9,9 @@ const CHANGE_EVENT = 'change',
 /* global moment */
 
 let currentDate = moment().startOf('day').toDate();
+let selectedDate = currentDate;
+let isDialogOpen = false;
+
 let items = [
         { id:"10001", text:"アイテム1",  date:"2016/02/01", time:"09:00" },
         { id:"10002", text:"アイテム2",  date:"2016/02/03", time:"10:00" },
@@ -36,6 +39,12 @@ const Store = Object.assign(EventEmitter.prototype, {
         });
     },
     
+    showItem: function(date, text){
+        selectedDate = date;
+        isDialogOpen = true;
+        Store.emitChange();
+    },
+    
     addItem: function(text, date, time){
         items.push({ id: Utils.uuid(), text: text, date: date, time: time });
         Store.emitChange();
@@ -61,12 +70,14 @@ const Store = Object.assign(EventEmitter.prototype, {
         //             || (itemFilter == Constants.ItemFilter.COMPLETED && item.checked);
         // });
         
-        let year = currentDate.getFullYear();
-        let month = currentDate.getMonth() + 1;
+        // let year = currentDate.getFullYear();
+        // let month = currentDate.getMonth() + 1;
         
         return { 
             currentDate,
-            items: items,//filtered_items,
+            selectedDate,
+            isDialogOpen,
+            items,
             itemFilter
         };
     },
@@ -105,6 +116,10 @@ Dispatcher.register(function (action) {
             Store.moveMonth(1);
             break;
 
+        case Constants.SHOW_ITEM:
+            Store.showItem(action.date, action.text);
+            break;
+            
         case Constants.ADD_ITEM:
             Store.addItem(action.text, action.checked);
             break;
