@@ -79,7 +79,7 @@ class DayItem extends React.Component {
   
   handleClick(date){
     console.log('DayItem clicked');
-    Actions.showItem(date, 'dummy');
+    Actions.openItem(date, '');
   }
   
   render() {
@@ -114,33 +114,25 @@ class DayItem extends React.Component {
 
 /* ================================================== */
 class CalendarItemDialog extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      open: this.props.isDialogOpen,
-      selectedDate: this.props.selectedDate
-    };
-  }
-  
-  componentWillReceiveProps(nextProps){
-    this.setState({
-      open: nextProps.isDialogOpen,
-      selectedDate: nextProps.selectedDate
-    });
-  }
-  
+
   handleCloseOK(){
-    alert("OK!");
+    console.log("handleCloseOK");
+    const date = this.refs.date.getDate();
+    const time = this.refs.time.getTime();
+    const text = this.refs.text.getValue();
+    console.log("date = ", date, ", time = ", time, ", text = '" + text + "'");
+    Actions.addItem(date, time, text);
+    
     this.handleClose();
   }
   
   handleClose(){
-    this.setState({open: false});
+    Actions.closeItem();
   }
 
   render(){
-    const selectedDate = this.state.selectedDate;
-    const open = this.state.open;
+    const selectedDate = this.props.selectedDate;
+    const open = this.props.isDialogOpen;
     const actions = [
       <FlatButton label="Ok" primary={true} keyboardFocused={true} onTouchTap={this.handleCloseOK.bind(this)} />,
     ];    
@@ -152,10 +144,10 @@ class CalendarItemDialog extends React.Component {
           onRequestClose={this.handleClose.bind(this)}
         >
           <div className="row">
-            <DatePicker hintText="Date" autoOk={true} defaultDate={ selectedDate } />
-            <TimePicker hintText="Time" autoOk={false} />
+            <DatePicker ref="date" hintText="Date" autoOk={true} defaultDate={ selectedDate } />
+            <TimePicker ref="time" hintText="Time" autoOk={false} />
           </div>
-          <TextField hintText="新しい予定"  defaultValue="新しい予定です。" />
+          <TextField ref="text" hintText="新しい予定"  defaultValue="新しい予定です。" />
       </Dialog>);
   }
 }

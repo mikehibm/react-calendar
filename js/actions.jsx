@@ -16,26 +16,35 @@ const Actions = {
         });
     },
     
-    showItem: function (date, text) {
+    openItem: function (date, text) {
         Dispatcher.dispatch({
-            actionType: Constants.SHOW_ITEM,
+            actionType: Constants.OPEN_ITEM,
             date: date,
             text: text
         });
     },
     
-    addItem: function (text) {
+    closeItem: function () {
         Dispatcher.dispatch({
-            actionType: Constants.ADD_ITEM,
-            text: text,
-            checked: false
+            actionType: Constants.CLOSE_ITEM
         });
     },
     
-    editItem: function(id, text){
+    addItem: function (date, time, text) {
+        Dispatcher.dispatch({
+            actionType: Constants.ADD_ITEM,
+            date: date,
+            time: time,
+            text: text
+        });
+    },
+    
+    editItem: function(id, date, time, text){
         Dispatcher.dispatch({
             actionType: Constants.EDIT_ITEM,
             id: id,
+            date: date,
+            time: time,
             text: text
         });
     },

@@ -39,20 +39,36 @@ const Store = Object.assign(EventEmitter.prototype, {
         });
     },
     
-    showItem: function(date, text){
+    openItem: function(date, text){
         selectedDate = date;
         isDialogOpen = true;
         Store.emitChange();
     },
     
-    addItem: function(text, date, time){
-        items.push({ id: Utils.uuid(), text: text, date: date, time: time });
+    closeItem: function(){
+        isDialogOpen = false;
+        Store.emitChange();
+    },
+    
+    addItem: function(date, time, text){
+        console.log('addItem: ', date, time, text);
+        items.push({ 
+            id: Utils.uuid(), 
+            date: moment(date).format("YYYY/MM/DD"), 
+            time: moment(time).format("HH:mm"), 
+            text: text 
+        });
+        console.table(items);
         Store.emitChange();
     },
 
-    editItem: function(id, text){
+    editItem: function(id, date, time, text){
         var item = Store.getItem(id);
-        item && (item.text = text);
+        if (item){
+            item.date = date;
+            item.time = time;
+            item.text = text;            
+        }
         Store.emitChange();
     },
 
@@ -116,16 +132,20 @@ Dispatcher.register(function (action) {
             Store.moveMonth(1);
             break;
 
-        case Constants.SHOW_ITEM:
-            Store.showItem(action.date, action.text);
+        case Constants.OPEN_ITEM:
+            Store.openItem(action.date, action.text);
+            break;
+            
+        case Constants.CLOSE_ITEM:
+            Store.closeItem();
             break;
             
         case Constants.ADD_ITEM:
-            Store.addItem(action.text, action.checked);
+            Store.addItem(action.date, action.time, action.text);
             break;
 
         case Constants.EDIT_ITEM:
-            Store.editItem(action.id, action.text);
+            Store.editItem(action.id, action.date, action.time, action.text);
             break;
 
         case Constants.REMOVE_ITEM:
