@@ -1,12 +1,8 @@
-const EventEmitter = require('events').EventEmitter,
-      Dispatcher = require('./dispatcher.jsx'),
-      Constants = require('./constants.jsx'),
-      Utils = require('./utils.jsx');
-
-const CHANGE_EVENT = 'change',
-      DBNAME = 'calendar';
-      
 /* global moment */
+import { EventEmitter } from 'events';
+import Dispatcher from './dispatcher.jsx';
+import Constants from './constants.jsx';
+import Utils from './utils.jsx';
 
 let currentDate = moment().startOf('day').toDate();
 let selectedDate = currentDate;
@@ -99,24 +95,24 @@ const Store = Object.assign(EventEmitter.prototype, {
     },
 
     addChangeListener: function (callback) {
-        this.on(CHANGE_EVENT, callback);
+        this.on(Constants.CHANGE_EVENT, callback);
     },
 
     removeChangeListener: function (callback) {
-        this.off(CHANGE_EVENT, callback);
+        this.off(Constants.CHANGE_EVENT, callback);
     },
 
     emitChange: function () {
-        this.emit(CHANGE_EVENT);
+        this.emit(Constants.CHANGE_EVENT);
         Store.save();
     },
     
     save: function(){
-        localStorage.setItem(DBNAME, JSON.stringify(items));
+        localStorage.setItem(Constants.DBNAME, JSON.stringify(items));
     },
     
     load: function(){
-        var data = localStorage.getItem(DBNAME);
+        var data = localStorage.getItem(Constants.DBNAME);
         data = data && JSON.parse(data);
         items = data || [];
     }

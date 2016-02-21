@@ -1,4 +1,5 @@
 module.exports = {
+	
 	PREV_MONTH: "prev_month",
 	NEXT_MONTH: "next_month",
 	
@@ -20,5 +21,13 @@ module.exports = {
 	},
 	
 	ENTER_KEY_CODE: 13,
-	ESCAPE_KEY_CODE: 27
+	ESCAPE_KEY_CODE: 27,
+	
+	CHANGE_EVENT: 'change',
+    DBNAME : 'calendar',
+
+	dayNames : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
 };
+
+

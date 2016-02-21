@@ -1,6 +1,5 @@
-
-const Dispatcher = require('./dispatcher.jsx'),
-      Constants = require('./constants.jsx');
+import Dispatcher from './dispatcher.jsx';
+import Constants from './constants.jsx';
 
 const Actions = {
     

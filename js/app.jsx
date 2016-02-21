@@ -1,179 +1,25 @@
 /* global moment */
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Router } from 'director';
+import Constants from './constants.jsx';
+import Store from './store.jsx';
+import Actions from './actions.jsx';
+import CalendarHeader from './components/CalendarHeader.jsx';
+import DayHeader from './components/DayHeader.jsx';
+import CalendarItem from './components/CalendarItem.jsx';
+import DayItem from './components/DayItem.jsx';
+import DayItems from './components/DayItems.jsx';
+import CalendarItemDialog from './components/CalendarItemDialog.jsx';
 
-//import React from 'react';
-const React = require('react'),
-  ReactDOM = require('react-dom'),
-  Router = require('director').Router,
-  Store = require('./store.jsx'),
-  Actions = require('./actions.jsx');
-
-import Dialog from 'material-ui/lib/dialog';
-import FlatButton from 'material-ui/lib/flat-button';
-import RaisedButton from 'material-ui/lib/raised-button';
-import DatePicker from 'material-ui/lib/date-picker/date-picker';
-import TimePicker from 'material-ui/lib/time-picker/time-picker';
-import TextField from 'material-ui/lib/text-field';
-
-
- /* ================================================== */
+/////////////////////////////////
 // For Material UI
-import injectTapEventPlugin from 'react-tap-event-plugin';
- 
 //Needed for onTouchTap. Can go away when react 1.0 release 
+import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
+/////////////////////////////////
 
 
-
-const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-/* ================================================== */
-class CalendarHeader extends React.Component {
-  prevMonth() {
-    Actions.prevMonth();
-  }
-  nextMonth() {
-    Actions.nextMonth();
-  }
-
-  render() {
-    const { year, month } = this.props;
-
-    return (
-      <header>
-          <RaisedButton label="&lt;" onClick={ this.prevMonth.bind(this) } />
-          <div className="year_month">
-            { year }年 { month+1 }月
-          </div>
-          <RaisedButton label="&gt;" onClick={ this.nextMonth.bind(this) } />
-      </header>);
-  }
-}
-
-/* ================================================== */
-class DayHeader extends React.Component {
-  render() {
-    const dayHeaders = dayNames.map(function(item, index){
-      return <div key={ index }>{ item }</div>;
-    });
-
-    return (
-      <div className='dayHeader'>
-        { dayHeaders }
-      </div>);
-  }
-}
-
-/* ================================================== */
-class CalendarItem extends React.Component {
-  render() {
-      const item = this.props.item;
-      return <li key={ item.id }>{item.time} { item.text }</li>;
-  }
-}
-
-/* ================================================== */
-class DayItem extends React.Component {
-  constructor(props) {
-    super(props);
-  }  
-  
-  handleClick(date){
-    console.log('DayItem clicked');
-    Actions.openItem(date, '');
-  }
-  
-  render() {
-    const { currentDate, year, month, dayNum, isPast, items } = this.props;
-    const startDay = moment(currentDate).startOf('month').weekday();
-    const date = moment({ year: year, month: month, day: (dayNum - startDay + 1) });
-    const isToday = moment().isSame(date, 'day');
-    const dayName = dayNames[ dayNum % 7 ];
-    const dayClass = 'day items ' + dayName + ' ' + (isToday ? 'today' : '');
-
-    const filteredItems = items.filter(function(item){
-      return moment(item.date, 'YYYY/MM/DD').isSame(date);
-    }).map(function(item) {
-      return <CalendarItem key={item.id} item={ item } />;
-    });
-    
-    if (isPast){
-      return (
-        <div className={ 'past ' + dayClass }>&nbsp;<br />
-          <ul>{ filteredItems }</ul>
-        </div>);
-    } 
-    
-    return (
-      <div className={dayClass} onClick={ this.handleClick.bind(this, date.toDate())  }>
-        { date.format('D') }
-        <ul>{ filteredItems }</ul>
-      </div>);
-  }
-  
-}
-
-/* ================================================== */
-class CalendarItemDialog extends React.Component {
-
-  handleCloseOK(){
-    console.log("handleCloseOK");
-    const date = this.refs.date.getDate();
-    const time = this.refs.time.getTime();
-    const text = this.refs.text.getValue();
-    console.log("date = ", date, ", time = ", time, ", text = '" + text + "'");
-    Actions.addItem(date, time, text);
-    
-    this.handleClose();
-  }
-  
-  handleClose(){
-    Actions.closeItem();
-  }
-
-  render(){
-    const selectedDate = this.props.selectedDate;
-    const open = this.props.isDialogOpen;
-    const actions = [
-      <FlatButton label="Ok" primary={true} keyboardFocused={true} onTouchTap={this.handleCloseOK.bind(this)} />,
-    ];    
-
-    return (
-      <Dialog
-          title="新しい予定"
-          actions={actions} modal={false} open={open}
-          onRequestClose={this.handleClose.bind(this)}
-        >
-          <div className="row">
-            <DatePicker ref="date" hintText="Date" autoOk={true} defaultDate={ selectedDate } />
-            <TimePicker ref="time" hintText="Time" autoOk={false} />
-          </div>
-          <TextField ref="text" hintText="新しい予定"  defaultValue="新しい予定です。" />
-      </Dialog>);
-  }
-}
-
-/* ================================================== */
-class DayItems extends React.Component {
-  render() {
-    const { currentDate, year, month, items } = this.props;
-    const startDay = moment(currentDate).startOf('month').weekday();
-    const days = [];
-
-    for (let i = 0; i < startDay; i++) {
-      days.push(<DayItem key={i}currentDate={currentDate} year={ year } month={ month }
-                  isPast={ true } dayNum={i} items={ items }></DayItem>);
-    }
-
-    for (let i = 0 + startDay; i < 31 + startDay; i++) {
-      days.push(<DayItem key={i} currentDate={currentDate} year={ year } month={ month }
-                  isPast={ false } dayNum={i} items={ items }></DayItem>);
-    }
-
-    return (<div className='days'>{ days }</div>);
-  }
-}
-
-/* ================================================== */
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -211,7 +57,6 @@ class App extends React.Component {
 
 
 /* ================================================== */
-//Define routes.
 const router = Router({
     '/': function() {
       Actions.showAll();
