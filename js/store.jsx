@@ -6,10 +6,10 @@ import Utils from './utils.jsx';
 
 let currentDate = moment().startOf('day').toDate();
 let selectedDate = currentDate;
+let selectedItem = { text: '' };
 let isDialogOpen = false;
 
 let items = [];
-let itemFilter = Constants.ItemFilter.ALL;
 
 const Store = Object.assign(EventEmitter.prototype, {
     
@@ -24,8 +24,12 @@ const Store = Object.assign(EventEmitter.prototype, {
         });
     },
     
-    openItem: function(date, text){
+    openItem: function(date, item){
         selectedDate = date;
+        selectedItem = Object.assign({}, { 
+            date: moment(date).format("YYYY/MM/DD"), 
+        }, item);
+        console.log("selectedItem", selectedItem);
         isDialogOpen = true;
         Store.emitChange();
     },
@@ -36,7 +40,7 @@ const Store = Object.assign(EventEmitter.prototype, {
     },
     
     addItem: function(date, time, text){
-        console.log('addItem: ', date, time, text);
+        console.log('Store: addItem: ', date, time, text);
         items.push({ 
             id: Utils.uuid(), 
             date: moment(date).format("YYYY/MM/DD"), 
@@ -47,12 +51,15 @@ const Store = Object.assign(EventEmitter.prototype, {
         Store.emitChange();
     },
 
-    editItem: function(id, date, time, text){
+    updateItem: function(id, date, time, text){
+        console.log('Store: updateItem: ', id, date, time, text);
         var item = Store.getItem(id);
         if (item){
-            item.date = date;
-            item.time = time;
+            item.date = moment(date).format("YYYY/MM/DD");
+            item.time = moment(time).format("HH:mm");
             item.text = text;            
+        } else {
+            console.log('Store: updateItem: id NOT FOUND. id=', id);
         }
         Store.emitChange();
     },
@@ -65,21 +72,12 @@ const Store = Object.assign(EventEmitter.prototype, {
     },
 
     getState: function () {
-        // var filtered_items = items.filter(function(item){
-        //     return (itemFilter == Constants.ItemFilter.ALL) 
-        //             || (itemFilter == Constants.ItemFilter.ACTIVE && !item.checked)
-        //             || (itemFilter == Constants.ItemFilter.COMPLETED && item.checked);
-        // });
-        
-        // let year = currentDate.getFullYear();
-        // let month = currentDate.getMonth() + 1;
-        
         return { 
             currentDate,
             selectedDate,
+            selectedItem,
             isDialogOpen,
             items,
-            itemFilter
         };
     },
 
@@ -118,7 +116,7 @@ Dispatcher.register(function (action) {
             break;
 
         case Constants.OPEN_ITEM:
-            Store.openItem(action.date, action.text);
+            Store.openItem(action.date, action.item);
             break;
             
         case Constants.CLOSE_ITEM:
@@ -129,8 +127,8 @@ Dispatcher.register(function (action) {
             Store.addItem(action.date, action.time, action.text);
             break;
 
-        case Constants.EDIT_ITEM:
-            Store.editItem(action.id, action.date, action.time, action.text);
+        case Constants.UPDATE_ITEM:
+            Store.updateItem(action.id, action.date, action.time, action.text);
             break;
 
         case Constants.REMOVE_ITEM:
@@ -138,17 +136,6 @@ Dispatcher.register(function (action) {
             break;
 
         case Constants.SHOW_ALL:
-            itemFilter = Constants.ItemFilter.ALL;
-            Store.emitChange();
-            break;
-
-        case Constants.SHOW_ACTIVE:
-            itemFilter = Constants.ItemFilter.ACTIVE;
-            Store.emitChange();
-            break;
-
-        case Constants.SHOW_COMPLETED:
-            itemFilter = Constants.ItemFilter.COMPLETED;
             Store.emitChange();
             break;
 

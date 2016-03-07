@@ -35,7 +35,7 @@ class App extends React.Component {
   }
 
   render() {
-    const {currentDate, items, selectedDate, isDialogOpen} = this.state;
+    const {currentDate, items, selectedDate, selectedItem, isDialogOpen} = this.state;
     const year = moment(currentDate).year();
     const month = moment(currentDate).month();
 
@@ -44,7 +44,7 @@ class App extends React.Component {
         <CalendarHeader year={ year } month={ month }></CalendarHeader>
         <DayHeader></DayHeader>
         <DayItems currentDate={ currentDate } year={ year } month={ month } items={ items }></DayItems>
-        <CalendarItemDialog selectedDate={ selectedDate } isDialogOpen={ isDialogOpen } />
+        <CalendarItemDialog selectedDate={ selectedDate } selectedItem={ selectedItem } isDialogOpen={ isDialogOpen } />
       </section>
     );
   }

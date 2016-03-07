@@ -15,11 +15,9 @@ const Actions = {
         });
     },
     
-    openItem: function (date, text) {
+    openItem: function (date, item) {
         Dispatcher.dispatch({
-            actionType: Constants.OPEN_ITEM,
-            date: date,
-            text: text
+            actionType: Constants.OPEN_ITEM, date, item
         });
     },
     
@@ -31,48 +29,22 @@ const Actions = {
     
     addItem: function (date, time, text) {
         Dispatcher.dispatch({
-            actionType: Constants.ADD_ITEM,
-            date: date,
-            time: time,
-            text: text
+            actionType: Constants.ADD_ITEM, date, time, text
         });
     },
     
-    editItem: function(id, date, time, text){
+    updateItem: function(id, date, time, text){
         Dispatcher.dispatch({
-            actionType: Constants.EDIT_ITEM,
-            id: id,
-            date: date,
-            time: time,
-            text: text
+            actionType: Constants.UPDATE_ITEM, id, date, time, text
         });
     },
     
     removeItem: function (id) {
         Dispatcher.dispatch({
-            actionType: Constants.REMOVE_ITEM,
-            id: id
+            actionType: Constants.REMOVE_ITEM, id
         });
     },
     
-    showAll: function(){
-        Dispatcher.dispatch({
-            actionType: Constants.SHOW_ALL
-        });
-    },
-    
-    showActive: function(){
-        Dispatcher.dispatch({
-            actionType: Constants.SHOW_ACTIVE
-        });
-    },
-    
-    showCompleted: function(){
-        Dispatcher.dispatch({
-            actionType: Constants.SHOW_COMPLETED
-        });
-    }
-
 };
 
 module.exports = Actions;

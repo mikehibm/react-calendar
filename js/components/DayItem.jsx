@@ -9,9 +9,11 @@ class DayItem extends React.Component {
     super(props);
   }  
   
-  handleClick(date){
-    console.log('DayItem clicked');
-    Actions.openItem(date, '');
+  handleClick(){
+    const { date } = this.props;
+    const selectedDate = date.toDate();
+    console.log('DayItem clicked selectedDate=', selectedDate);
+    Actions.openItem(selectedDate, null);
   }
   
   render() {
@@ -27,7 +29,7 @@ class DayItem extends React.Component {
     });
 
     return (
-      <div className={ dayClass } onClick={ this.handleClick.bind(this, date.toDate())  }>
+      <div className={ dayClass } onClick={ this.handleClick.bind(this) }>
         { date.format('D') }
         <ul>{ calendarItems }</ul>
       </div>);

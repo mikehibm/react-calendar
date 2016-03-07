@@ -20,9 +20,9 @@ class DayItems extends React.Component {
       let filteredItems = items.filter((item) => {
         return item.date == d.format('YYYY/MM/DD');
       });
-      console.log("d=", d.format('YYYY/MM/DD'), ", isBefore=", isBefore, ", isAfter=", isAfter, 
-                  ", startDate=", startDate.format('YYYY/MM/DD'), 
-                  ", endDate=", endDate.format('YYYY/MM/DD'));
+      // console.log("d=", d.format('YYYY/MM/DD'), ", isBefore=", isBefore, ", isAfter=", isAfter, 
+      //             ", startDate=", startDate.format('YYYY/MM/DD'), 
+      //             ", endDate=", endDate.format('YYYY/MM/DD'));
 
       days.push(<DayItem key={i} index={i} 
                   currentDate={currentDate} 
