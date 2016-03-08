@@ -12,6 +12,14 @@ import TextField from 'material-ui/lib/text-field';
 
 class CalendarItemDialog extends React.Component {
 
+   constructor(props) {
+    super(props);
+    
+    this.state = { 
+      isRemoveDialogOpen: false 
+    };
+  }
+
   handleCloseOK(){
     const { selectedDate, selectedItem } = this.props;
     console.log("handleCloseOK");
@@ -33,16 +41,45 @@ class CalendarItemDialog extends React.Component {
   handleClose(){
     Actions.closeItem();
   }
+  
+  openRemoveDialog(){
+    const { selectedItem } = this.props;
+    console.log("openRemoveDialog");
+    const id = selectedItem.id;
+    const date = selectedItem.date;
+    const time = selectedItem.time;
+    const text = selectedItem.text;
+    console.log(`${date} ${time} ${text}`);
+    this.setState({isRemoveDialogOpen : true });
+  }
+
+  closeRemoveDialog(){
+    this.setState({isRemoveDialogOpen : false});
+  }
+  
+  handleRemoveOk(){
+    const { selectedItem } = this.props;
+    console.log("handleRemoveOk");
+    const id = selectedItem.id;
+    Actions.removeItem(id);
+    this.closeRemoveDialog();
+    this.handleClose();
+  }
 
   render(){
     const { selectedDate, selectedItem, isDialogOpen } = this.props;
     const actions = [
-      <FlatButton label="Cancel" primary={false} keyboardFocused={false} onTouchTap={this.handleClose.bind(this)} />,
+      <FlatButton label="Cancel" secondary={true} onTouchTap={this.handleClose.bind(this)} />,
       <FlatButton label="Ok" primary={true} keyboardFocused={true} onTouchTap={this.handleCloseOK.bind(this)} />,
     ];    
-    const title = (selectedItem && selectedItem.id) ? '予定の編集' : '新しい予定';
-    const date = selectedDate;
-    const time = selectedItem && selectedItem.time;
+    const is_new = !(selectedItem && selectedItem.id);
+    const title = is_new ? '予定の編集' : '新しい予定';
+    //const time = selectedItem && selectedItem.time;
+
+    const remveDialogActions = [
+      <FlatButton label="Cancel" secondary={true} onTouchTap={this.closeRemoveDialog.bind(this)} />,
+      <FlatButton label="Remove" primary={true} keyboardFocused={true} onTouchTap={this.handleRemoveOk.bind(this)} />,
+    ];    
 
     return (
       <Dialog
@@ -51,10 +88,25 @@ class CalendarItemDialog extends React.Component {
           onRequestClose={this.handleClose.bind(this)}
         >
           <div className="row">
-            <DatePicker ref="date" hintText="Date" autoOk={true} defaultDate={ date } />
-            <TimePicker ref="time" hintText="Time" autoOk={false} defaultValue={ time } />
+            <DatePicker ref="date" hintText="Date" autoOk={true} defaultDate={ selectedDate } />
+            <TimePicker ref="time" hintText="Time" autoOk={false} defaultValue={ selectedItem.time } />
           </div>
           <TextField ref="text" defaultValue={ selectedItem.text } />
+          
+          {is_new ? null :
+            <FlatButton label="DELETE" primary={false} keyboardFocused={false} 
+                onTouchTap={this.openRemoveDialog.bind(this)} />
+          }
+          
+          <Dialog
+            title="Are you sure to remove this item?"
+            actions={remveDialogActions}
+            modal={false}
+            open={this.state.isRemoveDialogOpen}
+            onRequestClose={this.closeRemoveDialog}
+          >
+            { selectedItem.date } { selectedItem.time }<br />{ selectedItem.text }
+          </Dialog>          
       </Dialog>);
   }
 }
