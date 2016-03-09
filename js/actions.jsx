@@ -1,5 +1,6 @@
 import Dispatcher from './dispatcher.jsx';
 import Constants from './constants.jsx';
+import Item from './item.jsx';
 
 const Actions = {
     
@@ -28,14 +29,28 @@ const Actions = {
     },
     
     addItem: function (date, time, text) {
+        const item = new Item('', date, time, text);
+        const msg = item.valiate();
+        if (msg){
+            return msg;
+        }
+        
         Dispatcher.dispatch({
-            actionType: Constants.ADD_ITEM, date, time, text
+            actionType: Constants.ADD_ITEM, 
+            item
         });
     },
     
     updateItem: function(id, date, time, text){
+        const item = new Item(id, date, time, text);
+        const msg = item.valiate();
+        if (msg){
+            return msg;
+        }
+        
         Dispatcher.dispatch({
-            actionType: Constants.UPDATE_ITEM, id, date, time, text
+            actionType: Constants.UPDATE_ITEM, 
+            item
         });
     },
     

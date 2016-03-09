@@ -32,7 +32,11 @@ class CalendarItemDialog extends React.Component {
     if (id){
       Actions.updateItem(id, date, time, text);
     } else {
-      Actions.addItem(date, time, text);
+      const msg = Actions.addItem(date, time, text);
+      if (msg){
+        alert(msg);
+        return;
+      }
     }
     
     this.handleClose();
@@ -74,7 +78,7 @@ class CalendarItemDialog extends React.Component {
     ];    
     const is_new = !(selectedItem && selectedItem.id);
     const title = is_new ? '予定の編集' : '新しい予定';
-    //const time = selectedItem && selectedItem.time;
+    const time = selectedItem && moment(selectedItem.date + ' ' + selectedItem.time, 'YYYY/MM/DD HH:mm').toDate();
 
     const remveDialogActions = [
       <FlatButton label="Cancel" secondary={true} onTouchTap={this.closeRemoveDialog.bind(this)} />,
@@ -88,8 +92,8 @@ class CalendarItemDialog extends React.Component {
           onRequestClose={this.handleClose.bind(this)}
         >
           <div className="row">
-            <DatePicker ref="date" hintText="Date" autoOk={true} defaultDate={ selectedDate } />
-            <TimePicker ref="time" hintText="Time" autoOk={false} defaultValue={ selectedItem.time } />
+            <DatePicker ref="date" autoOk={true} defaultDate={ selectedDate } />
+            <TimePicker ref="time" autoOk={false} defaultTime={ time } />
           </div>
           <TextField ref="text" defaultValue={ selectedItem.text } />
           

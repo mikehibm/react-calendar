@@ -3,6 +3,7 @@ import { EventEmitter } from 'events';
 import Dispatcher from './dispatcher.jsx';
 import Constants from './constants.jsx';
 import Utils from './utils.jsx';
+import Item from './item.jsx';
 
 let currentDate = moment().startOf('day').toDate();
 let selectedDate = currentDate;
@@ -39,28 +40,29 @@ const Store = Object.assign(EventEmitter.prototype, {
         Store.emitChange();
     },
     
-    addItem: function(date, time, text){
-        console.log('Store: addItem: ', date, time, text);
-        items.push({ 
-            id: Utils.uuid(), 
-            date: moment(date).format("YYYY/MM/DD"), 
-            time: moment(time).format("HH:mm"), 
-            text: text 
-        });
+    addItem: function(item){
+        console.log('Store: addItem: ', item);
+        const newItem = new Item(
+                    Utils.uuid(), 
+                    moment(item.date).format("YYYY/MM/DD"),
+                    moment(item.time).format("HH:mm"),
+                    item.text);
+        items.push(newItem);
         console.table(items);
         Store.emitChange();
     },
 
-    updateItem: function(id, date, time, text){
-        console.log('Store: updateItem: ', id, date, time, text);
-        var item = Store.getItem(id);
-        if (item){
-            item.date = moment(date).format("YYYY/MM/DD");
-            item.time = moment(time).format("HH:mm");
-            item.text = text;            
+    updateItem: function(item){
+        console.log('Store: updateItem: ', item);
+        const existingItem = Store.getItem(item.id);
+        if (existingItem){
+            existingItem.date = moment(item.date).format("YYYY/MM/DD");
+            existingItem.time = moment(item.time).format("HH:mm");
+            existingItem.text = item.text;            
         } else {
-            console.log('Store: updateItem: id NOT FOUND. id=', id);
+            console.log('Store: updateItem: NOT FOUND. id=', id);
         }
+        console.table(items);
         Store.emitChange();
     },
 
@@ -68,6 +70,7 @@ const Store = Object.assign(EventEmitter.prototype, {
         items = items.filter(function(item){
             return item.id !== id;
         });
+        console.table(items);
         Store.emitChange();
     },
 
@@ -124,11 +127,11 @@ Dispatcher.register(function (action) {
             break;
             
         case Constants.ADD_ITEM:
-            Store.addItem(action.date, action.time, action.text);
+            Store.addItem(action.item);
             break;
 
         case Constants.UPDATE_ITEM:
-            Store.updateItem(action.id, action.date, action.time, action.text);
+            Store.updateItem(action.item);
             break;
 
         case Constants.REMOVE_ITEM:
