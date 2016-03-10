@@ -13,17 +13,16 @@ class DayItems extends React.Component {
     const displayEndDate = moment(endDate).endOf('week');
     
     const days = [];
-    let d = moment(displayStartDate), i = 0, isBefore = false, isAfter = false;
+    let d = moment(displayStartDate), i = 0;
     while (d.isSameOrBefore(displayEndDate)){
-      isBefore = d.isBefore(startDate);
-      isAfter = d.isAfter(endDate);
-      let filteredItems = items.filter((item) => {
+      const isBefore = d.isBefore(startDate);
+      const isAfter = d.isAfter(endDate);
+      
+      const filteredItems = items.filter((item) => {
         return item.date == d.format('YYYY/MM/DD');
       });
-      // console.log("d=", d.format('YYYY/MM/DD'), ", isBefore=", isBefore, ", isAfter=", isAfter, 
-      //             ", startDate=", startDate.format('YYYY/MM/DD'), 
-      //             ", endDate=", endDate.format('YYYY/MM/DD'));
-
+      filteredItems.sort((a, b) => a.time > b.time);
+      
       days.push(<DayItem key={i} index={i} 
                   currentDate={currentDate} 
                   year={ year } month={ month } date={moment(d)} 
