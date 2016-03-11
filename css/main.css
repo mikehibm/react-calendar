@@ -65,11 +65,17 @@ footer p {
 }
 
 
-.items ul {
-    padding-left: 2px;
+.items {
+    margin: 2px 0 0 0;
+    padding: 2px 0px 1px 2px;
     text-align:left;
     font-size:60%;
     /*clear: both;*/
     list-style-type: none;
+    /*word-wrap: break-word;*/
+    word-break:break-all;
 }
 
+.items li:hover {
+    background-color: #fdd;
+}

@@ -77,7 +77,7 @@ class CalendarItemDialog extends React.Component {
       <FlatButton label="Ok" primary={true} keyboardFocused={true} onTouchTap={this.handleCloseOK.bind(this)} />,
     ];    
     const is_new = !(selectedItem && selectedItem.id);
-    const title = is_new ? '予定の編集' : '新しい予定';
+    const title = is_new ? '新しい予定' : '予定の編集';
     const time = selectedItem && moment(selectedItem.date + ' ' + selectedItem.time, 'YYYY/MM/DD HH:mm').toDate();
 
     const remveDialogActions = [
