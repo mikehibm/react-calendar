@@ -24,12 +24,14 @@ footer p {
     font-size: x-small;
 }
 
+
+
 .dayHeader {
-    display: inline-block;
+    /*display: inline-block;*/
 }
 
-.dayHeader div {
-    display: inline-block;
+.dayHeader td {
+    /*display: inline-block;*/
     width: 100px;
     border: 1px solid pink;
     background-color: pink;
@@ -37,19 +39,22 @@ footer p {
 }
 
 .days {
+    border-collapse: collapse;
 }
 
 .day {
-    float: left;
+    /*float: left;*/
     width: 100px;
     min-height: 100px;
+    height: 100px;
     text-align: center;
+    vertical-align: top;
     border: 1px solid pink;
 }
 
 .day.Sun {
     background-color: #E074D0;
-    clear:both;
+    /*clear:both;*/
 }
 
 .day.Sat {

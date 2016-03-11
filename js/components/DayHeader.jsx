@@ -5,11 +5,11 @@ import Actions from '../actions.jsx';
 class DayHeader extends React.Component {
   render() {
     return (
-      <div className='dayHeader'>
+      <tr className='dayHeader'>
         { Constants.dayNames.map((item, index) => {
-          return <div key={ index }>{ item }</div>;
+          return <td key={ index }>{ item }</td>;
         }) }
-      </div>);
+      </tr>);
   }
 }
 

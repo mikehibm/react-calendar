@@ -19,7 +19,8 @@ class DayItem extends React.Component {
   render() {
     const { date, index, year, month, isBefore, isAfter, items } = this.props;
     const isToday = moment().isSame(date, 'day');
-    const dayName = Constants.dayNames[ index % 7 ];
+    const dayIndex = index % 7;
+    const dayName = Constants.dayNames[ dayIndex ];
     const dayClass = 'day ' + dayName 
                       + (isToday ? ' today' : '')
                       + (isBefore || isAfter ? ' past' : '');
@@ -29,10 +30,10 @@ class DayItem extends React.Component {
     });
 
     return (
-      <div className={ dayClass } onClick={ this.handleClick.bind(this) }>
+      <td className={ dayClass } onClick={ this.handleClick.bind(this) }>
         { date.format('D') }
         <ul className="items">{ calendarItems }</ul>
-      </div>);
+      </td>);
   }
   
 }

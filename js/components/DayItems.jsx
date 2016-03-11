@@ -2,6 +2,7 @@
 import React from 'react';
 import Constants from '../constants.jsx';
 import Actions from '../actions.jsx';
+import DayHeader from './DayHeader.jsx';
 import DayItem from './DayItem.jsx';
 
 class DayItems extends React.Component {
@@ -12,9 +13,11 @@ class DayItems extends React.Component {
     const displayStartDate = moment(startDate).startOf('week');
     const displayEndDate = moment(endDate).endOf('week');
     
-    const days = [];
+    const weeks = [];
+    let days = [];
     let d = moment(displayStartDate), i = 0;
     while (d.isSameOrBefore(displayEndDate)){
+      
       const isBefore = d.isBefore(startDate);
       const isAfter = d.isAfter(endDate);
       
@@ -23,18 +26,32 @@ class DayItems extends React.Component {
       });
       filteredItems.sort((a, b) => a.time > b.time);
       
-      days.push(<DayItem key={i} index={i} 
-                  currentDate={currentDate} 
-                  year={ year } month={ month } date={moment(d)} 
-                  isBefore={ isBefore } isAfter={ isAfter } 
-                  items={ filteredItems }>
-                </DayItem>);
+      days.push(
+        <DayItem key={i} index={i} 
+          currentDate={currentDate} 
+          year={ year } month={ month } date={moment(d)} 
+          isBefore={ isBefore } isAfter={ isAfter } 
+          items={ filteredItems }>
+        </DayItem>);
 
+      if (i % 7 == 6){
+        weeks.push(<tr key={i}>{ days }</tr>);
+        days = [];
+      }
+      
       d = moment(d).add(1, 'days');
       i++;
     }
 
-    return (<div className='days'>{ days }</div>);
+    return (
+      <table className='days'>
+        <thead>
+          <DayHeader></DayHeader>
+        </thead>
+        <tbody>
+          { weeks }
+        </tbody>
+      </table>);
   }
 }
 

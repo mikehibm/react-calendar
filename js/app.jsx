@@ -6,7 +6,6 @@ import Constants from './constants.jsx';
 import Store from './store.jsx';
 import Actions from './actions.jsx';
 import CalendarHeader from './components/CalendarHeader.jsx';
-import DayHeader from './components/DayHeader.jsx';
 import CalendarItem from './components/CalendarItem.jsx';
 import DayItem from './components/DayItem.jsx';
 import DayItems from './components/DayItems.jsx';
@@ -42,7 +41,6 @@ class App extends React.Component {
     return (
       <section>
         <CalendarHeader year={ year } month={ month }></CalendarHeader>
-        <DayHeader></DayHeader>
         <DayItems currentDate={ currentDate } year={ year } month={ month } items={ items }></DayItems>
         <CalendarItemDialog selectedDate={ selectedDate } selectedItem={ selectedItem } isDialogOpen={ isDialogOpen } />
       </section>
