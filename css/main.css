@@ -1,4 +1,6 @@
 body {
+    margin: 0;
+    padding: 4px;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -39,6 +41,7 @@ footer p {
 }
 
 .days {
+    width: 100%;
     border-collapse: collapse;
 }
 
