@@ -20,9 +20,7 @@ const Store = Object.assign(EventEmitter.prototype, {
     },
     
     getItem: function (id) {
-        return items.find(function(item){
-            return item.id === id;
-        });
+        return items.find(item => item.id === id);
     },
     
     openItem: function(date, item){

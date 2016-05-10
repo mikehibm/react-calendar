@@ -26,7 +26,9 @@ footer p {
     font-size: x-small;
 }
 
-
+.my-signin2.hidden {
+    display: none;
+} 
 
 .dayHeader {
     /*display: inline-block;*/
