@@ -30,6 +30,12 @@ footer p {
     display: none;
 } 
 
+.my-signin2, 
+.my-signout {
+    display: inline-block;
+    margin-left: 24px;
+}
+
 .dayHeader {
     /*display: inline-block;*/
 }

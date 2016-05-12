@@ -1,45 +1,41 @@
-/* global moment, gapi */
+/* global gapi */
 import app_settings from './gapi_settings.jsx'
 
 var clientsLoaded = 0;
-
 var sign2Loaded = false;
 var auth2Loaded = false;
 var auth2;
 
-if (app_settings.scopes.indexOf('profile') === -1)
+if (app_settings.scopes.indexOf('profile') === -1){
     app_settings.scopes.push('profile');
+}
 
 module.exports = {
     clientsLoaded: function (callback) {
         var ids = 0;
-        var check = function () {
+        var clientsLoadedCheck = function () {
             if (ids++ > 1000 || app_settings.libraries.length === clientsLoaded) {
                 callback();
             }
             else {
-                window.setTimeout(() => {
-                    check();
-                }, 50);
+                setTimeout(() => clientsLoadedCheck(), 50);
             }
         };
 
-        check();
+        clientsLoadedCheck();
     },
     
     authLoaded: function (callback) {
-        var check = function () {
+        var authLoadedCheck = function () {
             if (auth2Loaded && sign2Loaded) {
                 callback();
             }
             else {
-                window.setTimeout(() => {
-                    check();
-                }, 50);
+                setTimeout(() => authLoadedCheck(), 50);
             }
         };
 
-        check();
+        authLoadedCheck();
     },
     
     gapiLoaded: function (callback) {
@@ -48,9 +44,7 @@ module.exports = {
                 callback();
             }
             else {
-                window.setTimeout(() => {
-                    hasgapi();
-                }, 50);
+                setTimeout(() => hasgapi(), 50);
             }
         };
 
@@ -62,20 +56,16 @@ module.exports = {
     },
     
     signIn: function () {
-        var options = new gapi.auth2.SigninOptionsBuilder({
-            scopes: app_settings.scopes.join(' ')
-        });
-
-        this.getAuth2().signIn(options).then((success) => {
-        }, (fail) => {
-        });
+        return auth2.signIn();
     },
     
     signOut: function(){
-    	var auth2 = gapi.auth2.getAuthInstance();
-    	auth2.signOut().then(() => {
-      		console.log('User signed out.');
-    	});
+    	return auth2.signOut();
+    },
+    
+    renderSignInButton : function(button_id, options){
+        console.log('renderSignInButton to ' + button_id);
+        gapi.signin2.render(button_id, options);   
     }
 };
 
@@ -85,7 +75,7 @@ module.exports.gapiLoaded(function () {
     gapi.load('auth2', () => {
         auth2 = gapi.auth2.init({
             client_id: app_settings.client_id,
-            scopes: app_settings.scopes.join(' ')
+            scope: app_settings.scopes.join(' ')
         });
         auth2Loaded = true;
     });

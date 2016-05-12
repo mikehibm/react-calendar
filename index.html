@@ -5,52 +5,13 @@
 		<title>React Calendar</title>
 		<link rel="stylesheet" href="css/main.css" type="text/css" />
 		
-		<!--<meta name="google-signin-scope" content="profile email https://www.googleapis.com/auth/calendar">-->
-		<!--<meta name="google-signin-client_id" content="224512703854-d9u0hthtcu5l73qquhes7co3fch4hefi.apps.googleusercontent.com">-->
     	<script src="https://apis.google.com/js/platform.js" async defer></script>
 		<script src="https://apis.google.com/js/client.js" async defer></script>
     	
 		<!-- For Material UI -->
 		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500&subset=latin,greek' rel='stylesheet' type='text/css'>	
-		
-		<script>
-		    //function onSignInError(err){
-		    //	console.log('Google signin error.', err);
-		    //}
-					
-			//function onSignInSuccess(googleUser) {
-			  //var profile = googleUser.getBasicProfile();
-			  //console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-			  //console.log('Name: ' + profile.getName());
-			  //console.log('Image URL: ' + profile.getImageUrl());
-			  //var email = profile.getEmail();
-			  //console.log('Email: ' + email);
-			  
-	          //loadCalendarApi(email);
-			//}
-
-  			//function signOut() {
-			//	var auth2 = gapi.auth2.getAuthInstance();
-			//	auth2.signOut().then(function () {
-  			//		console.log('User signed out.');
-			//	});
-  			//}
-  			
-			//function appendPre(message) {
-			//	var pre = document.getElementById('events');
-			//	var textContent = document.createTextNode(message + '\n');
-			//	pre.appendChild(textContent);
-			//}	  				
-		</script>
 	</head>
 	<body>
-		<header>
-			<!--<div class="g-signin2" data-onsuccess="onSignInSuccess" data-onfailure='onSignInError'></div>-->
-			<!--<div>-->
-			<!--	<a class="btn-signout" href="#" onclick="signOut();">Sign out</a>-->
-			<!--</div>-->
-		</header>
-		
 		<section class="calenderapp"></section>
 		
 		<footer> 
@@ -64,6 +25,5 @@
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 		<script src="build/bundle.js"></script>
-
 	</body>
 </html>
