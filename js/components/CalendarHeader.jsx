@@ -2,7 +2,7 @@
 import React from 'react';
 import Constants from '../constants.jsx';
 import Actions from '../actions.jsx';
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from 'material-ui/RaisedButton';
 import GoogleApiLoader from '../GoogleApiLoader.jsx';
     
 class CalendarHeader extends React.Component {
@@ -119,7 +119,8 @@ class CalendarHeader extends React.Component {
   render() {
     const { year, month } = this.props;
     const { isLoggedIn } = this.state;
-    const signInButtonClass = 'my-signin2 ' + (isLoggedIn ? "hidden" : "shown");
+    const signInButtonClass = 'my-signin2 ' + (isLoggedIn ? 'hidden' : 'shown');
+    const signOutButtonClass = 'my-signout ' + (isLoggedIn ? 'shown' : 'hidden');
 
     return (
       <header>
@@ -130,8 +131,8 @@ class CalendarHeader extends React.Component {
           <RaisedButton label="&gt;" onClick={ this.nextMonth.bind(this) } />
           
           <div id="my-signin2" className={ signInButtonClass } >Sign In</div>
-          { isLoggedIn ? <RaisedButton label="Sign Out" className='my-signout' onClick={ this.handleSignOut.bind(this) } /> : null }
-          
+          <div className={ signOutButtonClass }><RaisedButton label="Sign Out" onClick={ this.handleSignOut.bind(this) } /></div>
+
       </header>);
   }
 }

@@ -2,41 +2,50 @@
 import React from 'react';
 import Constants from '../constants.jsx';
 import Actions from '../actions.jsx';
-import Dialog from 'material-ui/lib/dialog';
-import FlatButton from 'material-ui/lib/flat-button';
-import RaisedButton from 'material-ui/lib/raised-button';
-import DatePicker from 'material-ui/lib/date-picker/date-picker';
-import TimePicker from 'material-ui/lib/time-picker/time-picker';
-import TextField from 'material-ui/lib/text-field';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import DatePicker from 'material-ui/DatePicker';
+import TimePicker from 'material-ui/TimePicker';
+import TextField from 'material-ui/TextField';
 
 
 class CalendarItemDialog extends React.Component {
 
-   constructor(props) {
+  constructor(props) {
     super(props);
     
     this.state = { 
       isRemoveDialogOpen: false 
     };
   }
+  
+  componentWillReceiveProps(nextProps){
+    const { selectedItem } = nextProps;
+    const { date: strDate, time: strTime, text} = selectedItem;
+    const date = moment(strDate, 'YYYY/MM/DD').toDate();
+    const time = moment(strTime || '00:00', 'HH:mm').toDate();
+    this.setState({ 
+      date,
+      time,
+      text
+    });
+  }
+
+  
 
   handleCloseOK(){
     const { selectedDate, selectedItem } = this.props;
     console.log("handleCloseOK");
     const id = selectedItem.id;
-    const date = this.refs.date.getDate();
-    const time = this.refs.time.getTime();
-    const text = this.refs.text.getValue();
-    console.log("date = ", date, ", time = ", time, ", text = '" + text + "'");
-    
-    if (id){
-      Actions.updateItem(id, date, time, text);
-    } else {
-      const msg = Actions.addItem(date, time, text);
-      if (msg){
-        alert(msg);
-        return;
-      }
+    const {date, time, text} = this.state;
+    console.log(`date=${date}, time=${time}, text=${text}`);
+
+    var msg = id ? Actions.updateItem(id, date, time, text)
+                 : Actions.addItem(date, time, text);
+    if (msg){
+      alert(msg);
+      return;
     }
     
     this.handleClose();
@@ -47,13 +56,6 @@ class CalendarItemDialog extends React.Component {
   }
   
   openRemoveDialog(){
-    const { selectedItem } = this.props;
-    console.log("openRemoveDialog");
-    const id = selectedItem.id;
-    const date = selectedItem.date;
-    const time = selectedItem.time;
-    const text = selectedItem.text;
-    console.log(`${date} ${time} ${text}`);
     this.setState({isRemoveDialogOpen : true });
   }
 
@@ -70,6 +72,18 @@ class CalendarItemDialog extends React.Component {
     this.handleClose();
   }
 
+  handleChangeDate(event, date){
+    this.setState({ date });
+  }
+
+  handleChangeTime(event, time){
+    this.setState({ time });
+  }
+
+  handleChangeText(event, text){
+    this.setState({ text });
+  }
+  
   render(){
     const { selectedDate, selectedItem, isDialogOpen } = this.props;
     const actions = [
@@ -78,7 +92,6 @@ class CalendarItemDialog extends React.Component {
     ];    
     const is_new = !(selectedItem && selectedItem.id);
     const title = is_new ? '新しい予定' : '予定の編集';
-    const time = selectedItem && moment(selectedItem.date + ' ' + selectedItem.time, 'YYYY/MM/DD HH:mm').toDate();
 
     const remveDialogActions = [
       <FlatButton label="Cancel" secondary={true} onTouchTap={this.closeRemoveDialog.bind(this)} />,
@@ -92,12 +105,12 @@ class CalendarItemDialog extends React.Component {
           onRequestClose={this.handleClose.bind(this)}
         >
           <div className="row">
-            <DatePicker ref="date" autoOk={true} defaultDate={ selectedDate } />
-            <TimePicker ref="time" autoOk={false} defaultTime={ time } />
+            <DatePicker id="date" autoOk={true} value={ this.state.date } onChange={ this.handleChangeDate.bind(this) } />
+            <TimePicker id="time" autoOk={false} value={ this.state.time } onChange={ this.handleChangeTime.bind(this) } />
+            <TextField id="text" value={ this.state.text } onChange={ this.handleChangeText.bind(this) } />
           </div>
-          <TextField ref="text" defaultValue={ selectedItem.text } />
           
-          {is_new ? null :
+          { is_new ? null :
             <FlatButton label="DELETE" primary={false} keyboardFocused={false} 
                 onTouchTap={this.openRemoveDialog.bind(this)} />
           }

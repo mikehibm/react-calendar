@@ -8,7 +8,7 @@ class Item {
     }
     
     valiate(){
-        if (this.text == ''){
+        if (!this.text){
             return 'Please input a text.';
         }
         return '';

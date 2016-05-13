@@ -26,15 +26,16 @@ footer p {
     font-size: x-small;
 }
 
-.my-signin2.hidden {
-    display: none;
-} 
-
 .my-signin2, 
 .my-signout {
     display: inline-block;
     margin-left: 24px;
 }
+.my-signin2.hidden,
+.my-signout.hidden {
+    display: none;
+} 
+
 
 .dayHeader {
     /*display: inline-block;*/

@@ -2,14 +2,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'director';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import lightTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
 import Constants from './constants.jsx';
 import Store from './store.jsx';
 import Actions from './actions.jsx';
-import RaisedButton from 'material-ui/lib/raised-button';
 import CalendarHeader from './components/CalendarHeader.jsx';
 import DayItems from './components/DayItems.jsx';
 import CalendarItemDialog from './components/CalendarItemDialog.jsx';
-import GoogleApiLoader from './GoogleApiLoader.jsx';
 
 /////////////////////////////////
 // For Material UI
@@ -17,6 +20,8 @@ import GoogleApiLoader from './GoogleApiLoader.jsx';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 /////////////////////////////////
+
+const myTheme = getMuiTheme(lightTheme);
 
 
 class App extends React.Component {
@@ -30,11 +35,11 @@ class App extends React.Component {
     Store.addChangeListener(this._onChange.bind(this));
   }
   
-  componentWillUnmount() {
+  componentWillUnmount() {  
     Store.removeChangeListener(this._onChange.bind(this));
   }
 
-  _onChange() {
+  _onChange() {  
     this.setState(Store.getState());
   }
   
@@ -44,11 +49,13 @@ class App extends React.Component {
     const month = moment(currentDate).month();
 
     return (
-      <section>
-        <CalendarHeader year={ year } month={ month } isLoggedIn={ isLoggedIn } ></CalendarHeader>
-        <DayItems currentDate={ currentDate } year={ year } month={ month } items={ items }></DayItems>
-        <CalendarItemDialog selectedDate={ selectedDate } selectedItem={ selectedItem } isDialogOpen={ isDialogOpen } />
-      </section>
+      <MuiThemeProvider muiTheme={myTheme}>
+        <div>
+          <CalendarHeader year={ year } month={ month } isLoggedIn={ isLoggedIn } ></CalendarHeader>
+          <DayItems currentDate={ currentDate } year={ year } month={ month } items={ items }></DayItems>
+          <CalendarItemDialog selectedDate={ selectedDate } selectedItem={ selectedItem } isDialogOpen={ isDialogOpen } />
+        </div>
+      </MuiThemeProvider>
     );
   }
 

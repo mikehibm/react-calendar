@@ -24,9 +24,11 @@ const Store = Object.assign(EventEmitter.prototype, {
     },
     
     openItem: function(date, item){
-        selectedDate = date;
+        selectedDate = date || new Date();
         selectedItem = Object.assign({}, { 
-            date: moment(date).format("YYYY/MM/DD"), 
+            date: moment(selectedDate).format("YYYY/MM/DD"), 
+            time: '00:00',
+            text: ''
         }, item);
         console.log("selectedItem", selectedItem);
         isDialogOpen = true;
@@ -40,6 +42,7 @@ const Store = Object.assign(EventEmitter.prototype, {
     
     addItem: function(item){
         console.log('Store: addItem: ', item);
+        item.time = item.time || moment('00:00', 'HH:mm');
         const newItem = new Item(
                     Utils.uuid(), 
                     moment(item.date).format("YYYY/MM/DD"),
@@ -52,6 +55,7 @@ const Store = Object.assign(EventEmitter.prototype, {
 
     updateItem: function(item){
         console.log('Store: updateItem: ', item);
+        item.time = item.time || moment('00:00', 'HH:mm');
         const existingItem = Store.getItem(item.id);
         if (existingItem){
             existingItem.date = moment(item.date).format("YYYY/MM/DD");
