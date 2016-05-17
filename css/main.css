@@ -29,7 +29,8 @@ footer p {
 .my-signin2, 
 .my-signout {
     display: inline-block;
-    margin-left: 24px;
+    position: absolute;
+    right:4px;
 }
 .my-signin2.hidden,
 .my-signout.hidden {

@@ -7,10 +7,14 @@ import Item from './item.jsx';
 
 let currentDate = moment().startOf('day').toDate();
 let selectedDate = currentDate;
-let selectedItem = { text: '' };
+let selectedItem = {};
 let isDialogOpen = false;
-
 let items = [];
+
+let socialLoginInitializing = false;
+let getCalendarInProgress = false;
+let user = null;
+let isLoggedIn = false;
 
 const Store = Object.assign(EventEmitter.prototype, {
     
@@ -42,15 +46,21 @@ const Store = Object.assign(EventEmitter.prototype, {
     
     addItem: function(item){
         console.log('Store: addItem: ', item);
+        Store.addItemSub(item);
+        console.table(items);
+        Store.emitChange();
+    },
+    
+    addItemSub: function(item){
         item.time = item.time || moment('00:00', 'HH:mm');
         const newItem = new Item(
                     Utils.uuid(), 
                     moment(item.date).format("YYYY/MM/DD"),
                     moment(item.time).format("HH:mm"),
-                    item.text);
+                    item.text,
+                    item.synced || false
+                );
         items.push(newItem);
-        console.table(items);
-        Store.emitChange();
     },
 
     updateItem: function(item){
@@ -83,6 +93,10 @@ const Store = Object.assign(EventEmitter.prototype, {
             selectedItem,
             isDialogOpen,
             items,
+            socialLoginInitializing,
+            getCalendarInProgress,
+            user,
+            isLoggedIn
         };
     },
 
@@ -107,6 +121,61 @@ const Store = Object.assign(EventEmitter.prototype, {
         var data = localStorage.getItem(Constants.DBNAME);
         data = data && JSON.parse(data);
         items = data || [];
+    },
+    
+    initSocialLogin: function(){
+        socialLoginInitializing = true;
+        Store.emitChange();
+    },
+    
+    readySocialLogin: function(){
+        socialLoginInitializing = false;
+        Store.emitChange();
+    },
+    
+    signIn: function(loggedInUser){
+        user = loggedInUser;
+        isLoggedIn = !!loggedInUser;
+        Store.emitChange();
+    },
+    
+    signOut: function(){
+        user = null;
+        isLoggedIn = false;
+        Store.clearSyncedEvents();
+        Store.emitChange();
+    },
+    
+    clearSyncedEvents: function(){
+        items = items.filter((item) => !item.synced);
+    },
+    
+    beginGetCalendar: function(){
+        getCalendarInProgress = true;
+        Store.clearSyncedEvents();
+        Store.emitChange();
+    },
+    
+    endGetCalendar: function(events){
+        if (events){
+            const newItems = events.map((i) => {
+                var when = i.start.dateTime || i.start.date;
+                //console.log(i.summary + ' (' + when + ')', i);
+                return new Item(
+                        null, 
+                        when,
+                        when,
+                        i.summary,
+                        true
+                    );
+            });
+            
+            newItems.forEach((item) => {
+                Store.addItemSub(item);
+            });
+        }
+        getCalendarInProgress = false;
+        Store.emitChange();
     }
 });
 
@@ -142,6 +211,30 @@ Dispatcher.register(function (action) {
 
         case Constants.SHOW_ALL:
             Store.emitChange();
+            break;
+            
+        case Constants.INIT_SOCIAL:
+            Store.initSocialLogin();
+            break;
+            
+        case Constants.READY_SOCIAL:
+            Store.readySocialLogin();
+            break;
+            
+        case Constants.SIGNIN:
+            Store.signIn(action.user);
+            break;
+            
+        case Constants.SIGNOUT:
+            Store.signOut();
+            break;
+            
+        case Constants.BEGIN_GETCALENDAR:
+            Store.beginGetCalendar();        
+            break;
+            
+        case Constants.END_GETCALENDAR:
+            Store.endGetCalendar(action.events);
             break;
 
         default:

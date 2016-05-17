@@ -33,6 +33,8 @@ class App extends React.Component {
   componentDidMount() {
     console.log('App.componentDidMount.');          
     Store.addChangeListener(this._onChange.bind(this));
+    
+    Actions.initSocialLogin();
   }
   
   componentWillUnmount() {  

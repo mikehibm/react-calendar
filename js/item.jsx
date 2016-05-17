@@ -1,10 +1,11 @@
 class Item {
     
-    constructor(id, date, time, text){
+    constructor(id, date, time, text, synced){
         this.id = id;
         this.date = date;
         this.time = time;
         this.text = text;
+        this.synced = synced || false;
     }
     
     valiate(){

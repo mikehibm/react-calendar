@@ -16,7 +16,7 @@ class CalendarItem extends React.Component {
   render() {
       const item = this.props.item;
       return (<li key={ item.id } onClick={ this.handleClick.bind(this) }>
-        {item.time} { item.text }
+        {item.time == '00:00' ? '' : item.time } { item.text }
       </li>);
   }
 }

@@ -19,6 +19,13 @@ module.exports = {
 	
 	CHANGE_EVENT: 'change',
     DBNAME : 'calendar',
+    
+    INIT_SOCIAL: 'init_social',
+    READY_SOCIAL: 'ready_social',
+    SIGNIN: 'signin',
+    SIGNOUT: 'signout',
+    BEGIN_GETCALENDAR: 'begin_getcalendar',
+    END_GETCALENDAR: 'end_getcalendar',
 
 	dayNames : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
